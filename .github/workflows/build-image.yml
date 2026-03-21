@@ -30,7 +30,7 @@ on:
       location:
         description: 'Azure region (e.g. eastus, westeurope)'
         required: false
-        default: 'eastus'
+        default: 'canadacentral'
       force_rebuild:
         description: 'Trigger a new image build even if the template already exists'
         type: boolean
