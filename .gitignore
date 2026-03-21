@@ -3,7 +3,6 @@ infra/**/*.json
 
 # Bicep parameter files with real values (use *.bicepparam.example as templates)
 infra/setup.bicepparam
-infra/main.bicepparam
 
 # OS artefacts
 .DS_Store
