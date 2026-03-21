@@ -87,6 +87,18 @@ jobs:
           done
           echo "All providers registered."
 
+          # Register the SIGSoftDelete feature (required for gallery soft-delete policy)
+          echo "Registering Microsoft.Compute/SIGSoftDelete feature..."
+          az feature register --namespace Microsoft.Compute --name SIGSoftDelete 2>/dev/null || true
+          # Wait for the feature to reach 'Registered' state
+          while [ "$(az feature show --namespace Microsoft.Compute --name SIGSoftDelete --query properties.state -o tsv)" != "Registered" ]; do
+            echo "Waiting for SIGSoftDelete feature registration..."
+            sleep 10
+          done
+          # Re-register the provider to propagate the feature
+          az provider register --namespace Microsoft.Compute --wait
+          echo "SIGSoftDelete feature registered."
+
       # ── 4. Create resource group ─────────────────────────────────────────────
       - name: Create resource group
         run: |
