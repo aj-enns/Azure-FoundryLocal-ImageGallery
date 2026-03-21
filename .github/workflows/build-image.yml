@@ -1,0 +1,214 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# build-image.yml
+# GitHub Actions workflow that builds a Windows 11 Enterprise 24H2 image with
+# Azure Foundry Local pre-installed and publishes it to an Azure Compute Gallery
+# (community sharing enabled so anyone in Azure can consume it).
+#
+# Prerequisites – configure in GitHub Settings → Secrets and variables → Actions:
+#   Secrets:
+#     AZURE_CLIENT_ID        – App registration / managed identity client ID
+#     AZURE_TENANT_ID        – Azure AD tenant ID
+#     AZURE_SUBSCRIPTION_ID  – Target subscription ID
+#   Variables (optional overrides):
+#     AZURE_RESOURCE_GROUP   – Resource group (default: rg-foundry-image-gallery)
+#     AZURE_LOCATION         – Azure region     (default: eastus)
+#
+# The workflow uses OpenID Connect (OIDC) federated credentials – no long-lived
+# secrets are stored in GitHub.  See README.md for setup instructions.
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: Build Windows 11 + Foundry Local Image
+
+on:
+  # Allow manual runs with optional overrides
+  workflow_dispatch:
+    inputs:
+      resource_group:
+        description: 'Azure Resource Group name'
+        required: false
+        default: 'rg-foundry-image-gallery'
+      location:
+        description: 'Azure region (e.g. eastus, westeurope)'
+        required: false
+        default: 'eastus'
+      force_rebuild:
+        description: 'Trigger a new image build even if the template already exists'
+        type: boolean
+        required: false
+        default: true
+
+  # Rebuild automatically once a month to pick up the latest Windows Updates
+  schedule:
+    - cron: '0 3 1 * *'   # 03:00 UTC on the 1st of every month
+
+permissions:
+  id-token: write   # Required for OIDC login
+  contents: read
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Environment defaults (workflow_dispatch inputs take priority over schedule)
+# ─────────────────────────────────────────────────────────────────────────────
+env:
+  RESOURCE_GROUP: ${{ github.event.inputs.resource_group || vars.AZURE_RESOURCE_GROUP || 'rg-foundry-image-gallery' }}
+  LOCATION:       ${{ github.event.inputs.location       || vars.AZURE_LOCATION       || 'eastus' }}
+
+jobs:
+  # ───────────────────────────────────────────────────────────────────────────
+  build-and-publish:
+    name: Build and Publish Image
+    runs-on: ubuntu-latest
+    timeout-minutes: 240   # Image builds (including Windows Update) can take ~2–3 h
+
+    steps:
+      # ── 1. Checkout ─────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Azure login (OIDC – no stored passwords) ─────────────────────────
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id:       ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id:       ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # ── 3. Register required resource providers ──────────────────────────────
+      - name: Register resource providers
+        run: |
+          for provider in \
+            Microsoft.VirtualMachineImages \
+            Microsoft.Compute \
+            Microsoft.KeyVault \
+            Microsoft.Storage \
+            Microsoft.Network \
+            Microsoft.ManagedIdentity; do
+            echo "Registering $provider..."
+            az provider register --namespace "$provider" --wait
+          done
+          echo "All providers registered."
+
+      # ── 4. Create resource group ─────────────────────────────────────────────
+      - name: Create resource group
+        run: |
+          az group create \
+            --name     "${{ env.RESOURCE_GROUP }}" \
+            --location "${{ env.LOCATION }}" \
+            --tags     project=Azure-FoundryLocal-ImageGallery managedBy=GitHubActions
+
+      # ── 5. Deploy Bicep infrastructure ───────────────────────────────────────
+      - name: Deploy infrastructure (Bicep)
+        id: deploy
+        run: |
+          DEPLOY_OUTPUT=$(az deployment group create \
+            --resource-group "${{ env.RESOURCE_GROUP }}" \
+            --template-file  infra/main.bicep \
+            --parameters     @infra/main.bicepparam \
+            --parameters     location="${{ env.LOCATION }}" \
+            --name           "deploy-$(date +%Y%m%d%H%M%S)" \
+            --query          properties.outputs \
+            --output         json)
+
+          echo "deploy_output<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$DEPLOY_OUTPUT"     >> "$GITHUB_OUTPUT"
+          echo "EOF"                >> "$GITHUB_OUTPUT"
+
+          IMAGE_TEMPLATE_NAME=$(echo "$DEPLOY_OUTPUT" | jq -r '.imageTemplateName.value')
+          GALLERY_NAME=$(echo "$DEPLOY_OUTPUT"        | jq -r '.galleryName.value')
+          IMAGE_DEF_NAME=$(echo "$DEPLOY_OUTPUT"      | jq -r '.imageDefinitionName.value')
+
+          echo "image_template_name=$IMAGE_TEMPLATE_NAME" >> "$GITHUB_OUTPUT"
+          echo "gallery_name=$GALLERY_NAME"               >> "$GITHUB_OUTPUT"
+          echo "image_def_name=$IMAGE_DEF_NAME"           >> "$GITHUB_OUTPUT"
+
+          echo "Infrastructure deployed successfully."
+          echo "  Image template : $IMAGE_TEMPLATE_NAME"
+          echo "  Gallery        : $GALLERY_NAME"
+          echo "  Image def      : $IMAGE_DEF_NAME"
+
+      # ── 6. Wait for RBAC propagation ─────────────────────────────────────────
+      # Role assignments can take up to 5 minutes to propagate globally.
+      - name: Wait for RBAC propagation
+        run: |
+          echo "Waiting 90 seconds for RBAC to propagate..."
+          sleep 90
+
+      # ── 7. Trigger image build ────────────────────────────────────────────────
+      - name: Trigger image build
+        run: |
+          az image builder run \
+            --resource-group "${{ env.RESOURCE_GROUP }}" \
+            --name           "${{ steps.deploy.outputs.image_template_name }}" \
+            --no-wait
+          echo "Image build triggered. Polling for completion..."
+
+      # ── 8. Poll until the build completes ────────────────────────────────────
+      - name: Wait for image build to complete
+        run: |
+          TEMPLATE="${{ steps.deploy.outputs.image_template_name }}"
+          RG="${{ env.RESOURCE_GROUP }}"
+          MAX_WAIT=180   # minutes
+          INTERVAL=5     # minutes between polls
+          ELAPSED=0
+
+          while [ "$ELAPSED" -lt "$MAX_WAIT" ]; do
+            STATE=$(az image builder show \
+              --resource-group "$RG" \
+              --name           "$TEMPLATE" \
+              --query          "lastRunStatus.runState" \
+              --output         tsv 2>/dev/null || echo "Unknown")
+
+            echo "[$(date -u '+%H:%M:%S')] Build state: $STATE (elapsed: ${ELAPSED}m)"
+
+            case "$STATE" in
+              Succeeded)
+                echo "Image build succeeded."
+                exit 0
+                ;;
+              Failed|Canceled|Canceling)
+                echo "Image build ended with state: $STATE"
+                # Print the full run status for diagnostics
+                az image builder show \
+                  --resource-group "$RG" \
+                  --name           "$TEMPLATE" \
+                  --query          "lastRunStatus" \
+                  --output         json
+                exit 1
+                ;;
+            esac
+
+            sleep $(( INTERVAL * 60 ))
+            ELAPSED=$(( ELAPSED + INTERVAL ))
+          done
+
+          echo "Timed out after ${MAX_WAIT} minutes waiting for image build."
+          exit 1
+
+      # ── 9. Print image version summary ───────────────────────────────────────
+      - name: Summarise published image
+        if: success()
+        run: |
+          RG="${{ env.RESOURCE_GROUP }}"
+          GALLERY="${{ steps.deploy.outputs.gallery_name }}"
+          IMAGE_DEF="${{ steps.deploy.outputs.image_def_name }}"
+
+          echo "## ✅ Image Build Complete" >> "$GITHUB_STEP_SUMMARY"
+          echo ""                           >> "$GITHUB_STEP_SUMMARY"
+          echo "| Field | Value |"          >> "$GITHUB_STEP_SUMMARY"
+          echo "|-------|-------|"          >> "$GITHUB_STEP_SUMMARY"
+          echo "| Resource Group | \`$RG\` |"       >> "$GITHUB_STEP_SUMMARY"
+          echo "| Gallery | \`$GALLERY\` |"          >> "$GITHUB_STEP_SUMMARY"
+          echo "| Image Definition | \`$IMAGE_DEF\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo ""                           >> "$GITHUB_STEP_SUMMARY"
+          echo "### Published versions"     >> "$GITHUB_STEP_SUMMARY"
+          echo '```'                        >> "$GITHUB_STEP_SUMMARY"
+          az sig image-version list \
+            --resource-group            "$RG" \
+            --gallery-name              "$GALLERY" \
+            --gallery-image-definition  "$IMAGE_DEF" \
+            --output                    table        >> "$GITHUB_STEP_SUMMARY"
+          echo '```'                        >> "$GITHUB_STEP_SUMMARY"
+
+      # ── 10. Azure logout ─────────────────────────────────────────────────────
+      - name: Logout from Azure
+        if: always()
+        run: az logout
