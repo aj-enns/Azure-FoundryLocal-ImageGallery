@@ -50,7 +50,7 @@ permissions:
 # ─────────────────────────────────────────────────────────────────────────────
 env:
   RESOURCE_GROUP: ${{ github.event.inputs.resource_group || vars.AZURE_RESOURCE_GROUP || 'rg-foundry-image-gallery' }}
-  LOCATION:       ${{ github.event.inputs.location       || vars.AZURE_LOCATION       || 'eastus' }}
+  LOCATION:       ${{ github.event.inputs.location       || vars.AZURE_LOCATION       || 'canadacentral' }}
 
 jobs:
   # ───────────────────────────────────────────────────────────────────────────
