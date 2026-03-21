@@ -107,7 +107,23 @@ jobs:
             --location "${{ env.LOCATION }}" \
             --tags     project=Azure-FoundryLocal-ImageGallery managedBy=GitHubActions
 
-      # ── 5. Deploy Bicep infrastructure ───────────────────────────────────────
+      # ── 5. Delete existing image template (if any) ──────────────────────────
+      # Image Builder templates cannot be updated in-place — they must be
+      # deleted and recreated. This step removes a leftover template so the
+      # Bicep deployment can create a fresh one.
+      - name: Delete existing image template
+        run: |
+          TEMPLATE_NAME="flocal-win11-foundry-template"
+          RG="${{ env.RESOURCE_GROUP }}"
+          if az image builder show --name "$TEMPLATE_NAME" --resource-group "$RG" &>/dev/null; then
+            echo "Deleting existing image template '$TEMPLATE_NAME'..."
+            az image builder delete --name "$TEMPLATE_NAME" --resource-group "$RG" --yes
+            echo "Template deleted."
+          else
+            echo "No existing template found — skipping."
+          fi
+
+      # ── 6. Deploy Bicep infrastructure ───────────────────────────────────────
       - name: Deploy infrastructure (Bicep)
         id: deploy
         run: |
