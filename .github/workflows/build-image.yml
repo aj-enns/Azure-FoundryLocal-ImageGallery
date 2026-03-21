@@ -102,7 +102,7 @@ jobs:
           DEPLOY_OUTPUT=$(az deployment group create \
             --resource-group "${{ env.RESOURCE_GROUP }}" \
             --template-file  infra/main.bicep \
-            --parameters     @infra/main.bicepparam \
+            --parameters     infra/main.bicepparam \
             --parameters     location="${{ env.LOCATION }}" \
             --name           "deploy-$(date +%Y%m%d%H%M%S)" \
             --query          properties.outputs \

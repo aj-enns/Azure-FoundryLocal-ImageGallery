@@ -1,0 +1,37 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// setup.bicepparam.example
+// Copy this file to setup.bicepparam and fill in your values.
+// setup.bicepparam is git-ignored so your secrets stay local.
+//
+// Usage:
+//   cp infra/setup.bicepparam.example infra/setup.bicepparam
+//   # Edit infra/setup.bicepparam with your values, then:
+//   az deployment sub create \
+//     --location <your-region> \
+//     --template-file infra/setup.bicep \
+//     --parameters infra/setup.bicepparam \
+//     --query '{AZURE_CLIENT_ID: properties.outputs.azurE_CLIENT_ID.value, AZURE_TENANT_ID: properties.outputs.azurE_TENANT_ID.value, AZURE_SUBSCRIPTION_ID: properties.outputs.azurE_SUBSCRIPTION_ID.value}' \
+//     --output table
+// ─────────────────────────────────────────────────────────────────────────────
+
+using './setup.bicep'
+
+// ── App Registration ──────────────────────────────────────────────────────────
+param appDisplayName = 'github-foundry-image-builder'
+
+// ── GitHub OIDC federation ────────────────────────────────────────────────────
+// Update these to match your GitHub account and repository.
+
+param gitHubOrganisation = '<your-github-username-or-org>'
+param gitHubRepository = 'Azure-FoundryLocal-ImageGallery'
+param gitHubBranch = 'main'
+
+// ── Azure ─────────────────────────────────────────────────────────────────────
+param location = 'eastus'
+param setupResourceGroupName = 'rg-foundry-image-setup'
+
+// ── Tags ──────────────────────────────────────────────────────────────────────
+param tags = {
+  project: 'Azure-FoundryLocal-ImageGallery'
+  managedBy: 'BootstrapSetup'
+}

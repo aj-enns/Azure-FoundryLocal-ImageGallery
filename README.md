@@ -4,6 +4,32 @@ Automated pipeline that builds a **Windows 11 Enterprise 24H2** VM image with **
 
 ---
 
+## Quick Start
+
+> For detailed, step-by-step instructions see **[docs/INSTALL.md](docs/INSTALL.md)**.
+
+```bash
+# 1. Fork/clone the repo, then copy the example param file and fill in your values
+cp infra/setup.bicepparam.example infra/setup.bicepparam
+# Edit infra/setup.bicepparam — set your GitHub org/username and preferred region
+
+# 2. Bootstrap the App Registration + OIDC + Contributor role (one-time)
+az login
+az deployment sub create \
+  --location eastus \
+  --template-file infra/setup.bicep \
+  --parameters infra/setup.bicepparam \
+  --query '{AZURE_CLIENT_ID: properties.outputs.azurE_CLIENT_ID.value, AZURE_TENANT_ID: properties.outputs.azurE_TENANT_ID.value, AZURE_SUBSCRIPTION_ID: properties.outputs.azurE_SUBSCRIPTION_ID.value}' \
+  --output table
+
+# 3. Copy the three output values from the table into GitHub Secrets
+
+# 4. Update infra/main.bicepparam with your gallery metadata, then:
+#    Actions → Build Windows 11 + Foundry Local Image → Run workflow
+```
+
+---
+
 ## What is built
 
 | Component | Details |
@@ -21,86 +47,60 @@ Automated pipeline that builds a **Windows 11 Enterprise 24H2** VM image with **
 ```
 .
 ├── .github/
+│   ├── copilot-instructions.md          # Copilot coding conventions
 │   └── workflows/
-│       └── build-image.yml          # GitHub Actions workflow
+│       └── build-image.yml              # GitHub Actions workflow
+├── docs/
+│   └── INSTALL.md                       # Step-by-step installation guide
 ├── infra/
-│   ├── main.bicep                   # Root Bicep template
-│   ├── main.bicepparam              # Default parameter values
+│   ├── setup.bicep                      # One-time bootstrap (subscription-scoped)
+│   ├── setup.bicepparam.example         # Bootstrap parameter template (copy to setup.bicepparam)
+│   ├── main.bicep                       # Core infrastructure (resource-group-scoped)
+│   ├── main.bicepparam                  # Infrastructure parameter defaults
 │   └── modules/
-│       ├── identity.bicep           # User-assigned managed identity + RBAC
-│       ├── gallery.bicep            # Azure Compute Gallery + image definition
-│       └── imagebuilder.bicep       # Azure Image Builder template
+│       ├── appregistration.bicep        # App Registration + OIDC federation
+│       ├── identity.bicep               # User-assigned managed identity + RBAC
+│       ├── gallery.bicep                # Azure Compute Gallery + image definition
+│       └── imagebuilder.bicep           # Azure Image Builder template
 └── scripts/
     └── windows/
-        └── install-foundry-local.ps1  # Standalone install script
+        └── install-foundry-local.ps1    # Standalone Foundry Local install script
 ```
 
 ---
 
 ## Prerequisites
 
-### Azure
+| Requirement | Details |
+|-------------|---------|
+| **Azure subscription** | With **Owner** rights (needed to create role assignments). |
+| **Azure AD (Entra ID)** | Permission to create App Registrations. |
+| **GitHub account** | To host the repository and run GitHub Actions. |
+| **Azure CLI** | [Install Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) — used for the one-time bootstrap deployment. |
 
-1. An Azure subscription with **Owner** or **Contributor** rights.
-2. The following resource providers registered (the workflow registers them automatically):
-   - `Microsoft.VirtualMachineImages`
-   - `Microsoft.Compute`
-   - `Microsoft.KeyVault`
-   - `Microsoft.Storage`
-   - `Microsoft.Network`
-   - `Microsoft.ManagedIdentity`
-
-### GitHub – OIDC federated credentials
-
-The workflow authenticates to Azure using **OpenID Connect** (no long-lived secrets stored in GitHub).
-
-1. [Create an App Registration](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app) in Azure AD.
-2. Add a **Federated credential** for GitHub Actions:
-   - Organisation: `aj-enns`
-   - Repository: `Azure-FoundryLocal-ImageGallery`
-   - Entity: `Branch` → `copilot/create-windows-11-image-with-azure-foundry` (or `main` after merge)
-3. Grant the App Registration **Contributor** on the target subscription (the Bicep template further scopes permissions).
-4. Add the following **GitHub Secrets** (`Settings → Secrets and variables → Actions`):
-
-   | Secret | Value |
-   |--------|-------|
-   | `AZURE_CLIENT_ID` | App Registration client ID |
-   | `AZURE_TENANT_ID` | Azure AD tenant ID |
-   | `AZURE_SUBSCRIPTION_ID` | Target subscription ID |
-
-5. Optionally, add **GitHub Variables** to override defaults:
-
-   | Variable | Default |
-   |----------|---------|
-   | `AZURE_RESOURCE_GROUP` | `rg-foundry-image-gallery` |
-   | `AZURE_LOCATION` | `eastus` |
+The workflow automatically registers all required resource providers (`Microsoft.VirtualMachineImages`, `Microsoft.Compute`, `Microsoft.KeyVault`, `Microsoft.Storage`, `Microsoft.Network`, `Microsoft.ManagedIdentity`).
 
 ---
 
-## First-time setup
+## Setup Overview
 
-### 1. Update community gallery metadata
+Setup is split into two phases:
 
-Edit `infra/main.bicepparam` and set your publisher details:
+### Phase 1 — Bootstrap (run once from your machine)
 
-```bicep
-param galleryPublicNamePrefix = 'FoundryLocalGallery'   // globally unique prefix
-param publisherUri     = 'https://your-website.example.com'
-param publisherContact = 'your-email@example.com'
-param eula             = 'Your EULA text here...'
-```
+Deploy `infra/setup.bicep` to create:
 
-### 2. Run the workflow
+- An **App Registration** in Entra ID
+- A **Federated Identity Credential** for GitHub Actions OIDC (no stored secrets)
+- A **Service Principal** with **Contributor** on the subscription
 
-Navigate to **Actions → Build Windows 11 + Foundry Local Image → Run workflow**.
+Then copy the three deployment outputs into **GitHub Secrets** (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`).
 
-The workflow will:
-1. Register required resource providers.
-2. Create the resource group (if it does not exist).
-3. Deploy the Bicep infrastructure (identity, gallery, image definition, image template).
-4. Trigger Azure Image Builder (build takes ~2–3 hours including Windows Update).
-5. Publish the finished image version to the gallery.
-6. Print a summary with the new image version details.
+### Phase 2 — Build the image (GitHub Actions)
+
+Trigger the **Build Windows 11 + Foundry Local Image** workflow. It deploys the Bicep infrastructure, runs Azure Image Builder, and publishes the finished image to the Compute Gallery.
+
+> See **[docs/INSTALL.md](docs/INSTALL.md)** for the full walkthrough, including a manual portal-based alternative.
 
 ---
 
@@ -120,7 +120,7 @@ Once the build succeeds, consumers can create VMs directly from the community ga
 # List available image versions
 az sig image-version list \
   --resource-group  rg-foundry-image-gallery \
-  --gallery-name    flocalGallery \
+  --gallery-name    flocalgallery \
   --gallery-image-definition Win11-FoundryLocal \
   --output table
 
@@ -134,7 +134,7 @@ az vm create \
   --generate-ssh-keys
 ```
 
-### Verifying Foundry Local after VM creation
+### Verifying Foundry Local
 
 ```powershell
 foundry --version
