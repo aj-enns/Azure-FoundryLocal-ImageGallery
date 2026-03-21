@@ -81,7 +81,8 @@ jobs:
             Microsoft.KeyVault \
             Microsoft.Storage \
             Microsoft.Network \
-            Microsoft.ManagedIdentity; do
+            Microsoft.ManagedIdentity \
+            Microsoft.ContainerInstance; do
             echo "Registering $provider..."
             az provider register --namespace "$provider" --wait
           done
