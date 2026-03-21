@@ -11,9 +11,9 @@ param location string
 @description('Name of the Azure Compute Gallery. Must be globally unique.')
 param galleryName string
 
-@description('Short prefix used to generate the gallery\'s public community name (e.g. "FoundryLocal").')
-@minLength(1)
-@maxLength(30)
+@description('Short prefix used to generate the gallery\'s public community name (5–16 chars, alphanumeric only).')
+@minLength(5)
+@maxLength(16)
 param galleryPublicNamePrefix string
 
 @description('HTTPS URI for the publisher\'s public website.')

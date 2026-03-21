@@ -31,9 +31,9 @@ param imageTemplateName string = '${namePrefix}-win11-foundry-template'
 
 // ── Community gallery metadata ────────────────────────────────────────────────
 
-@description('Short public name prefix for the community gallery (max 30 chars, letters/numbers only).')
-@minLength(1)
-@maxLength(30)
+@description('Short public name prefix for the community gallery (5–16 chars, alphanumeric only — no hyphens or spaces).')
+@minLength(5)
+@maxLength(16)
 param galleryPublicNamePrefix string
 
 @description('Public HTTPS URI for the gallery publisher.')

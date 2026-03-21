@@ -12,7 +12,7 @@ param namePrefix = 'flocal'
 // ── Community gallery metadata ────────────────────────────────────────────────
 // Update these values before your first deployment.
 
-param galleryPublicNamePrefix = 'FoundryLocalGallery'
+param galleryPublicNamePrefix = 'FoundryLocal'
 
 param publisherUri = 'https://github.com/aj-enns/Azure-FoundryLocal-ImageGallery'
 
