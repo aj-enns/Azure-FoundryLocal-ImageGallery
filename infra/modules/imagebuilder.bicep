@@ -47,8 +47,10 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01
   }
 
   properties: {
-    // Allow up to 3 hours for the build (Windows Update can be slow).
-    buildTimeoutInMinutes: 180
+    // Allow up to 4.5 hours for the build. Windows Update on a fresh
+    // Windows 11 image can easily take 2+ hours on its own, plus time for
+    // Foundry Local install, restarts, cleanup, and VHD distribution.
+    buildTimeoutInMinutes: 270
 
     // Use a dedicated staging resource group so it can be exempted from
     // Azure Policies that block storage-account shared key access.
@@ -109,14 +111,33 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01
         updateLimit: 40
       }
 
-      // 4. Restart after Windows Update.
+      // 4. Restart after Windows Update (first pass).
       {
         type: 'WindowsRestart'
-        restartCheckCommand: 'echo Restart after Windows Update complete.'
+        restartCheckCommand: 'echo Restart after Windows Update pass 1 complete.'
         restartTimeout: '15m'
       }
 
-      // 5. Run a final sysprep-prepare cleanup so the image is generalised
+      // 5. Apply a second round of Windows Updates.
+      //    Some updates only appear after a reboot installs earlier ones.
+      {
+        type: 'WindowsUpdate'
+        searchCriteria: 'IsInstalled=0'
+        filters: [
+          'exclude:$_.Title -like \'\'*Preview*\'\''
+          'include:$true'
+        ]
+        updateLimit: 40
+      }
+
+      // 6. Restart after Windows Update (second pass).
+      {
+        type: 'WindowsRestart'
+        restartCheckCommand: 'echo Restart after Windows Update pass 2 complete.'
+        restartTimeout: '15m'
+      }
+
+      // 7. Run a final sysprep-prepare cleanup so the image is generalised
       //    cleanly (Image Builder calls sysprep automatically, but this
       //    ensures temporary files are removed first).
       {

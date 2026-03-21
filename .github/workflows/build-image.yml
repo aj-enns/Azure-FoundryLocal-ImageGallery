@@ -52,7 +52,7 @@ jobs:
   build-and-publish:
     name: Build and Publish Image
     runs-on: ubuntu-latest
-    timeout-minutes: 240   # Image builds (including Windows Update) can take ~2–3 h
+    timeout-minutes: 330   # Image builds can take 4+ hours with Windows Update
 
     steps:
       # ── 1. Checkout ─────────────────────────────────────────────────────────
@@ -176,7 +176,7 @@ jobs:
         run: |
           TEMPLATE="${{ steps.deploy.outputs.image_template_name }}"
           RG="${{ env.RESOURCE_GROUP }}"
-          MAX_WAIT=180   # minutes
+          MAX_WAIT=280   # minutes (must exceed buildTimeoutInMinutes in imagebuilder.bicep)
           INTERVAL=5     # minutes between polls
           ELAPSED=0
 
