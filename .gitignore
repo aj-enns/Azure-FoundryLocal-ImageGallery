@@ -1,0 +1,12 @@
+# Bicep – compiled ARM JSON output (generated, not source-controlled)
+infra/**/*.json
+
+# OS artefacts
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
