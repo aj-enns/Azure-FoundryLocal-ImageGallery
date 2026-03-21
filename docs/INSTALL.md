@@ -30,7 +30,7 @@ Before you begin, make sure you have:
 | **Azure subscription** | With **Owner** or **Contributor + User Access Administrator** rights. Owner is preferred because the Bicep templates create role assignments. |
 | **Azure AD (Entra ID) access** | Permission to create App Registrations and Federated Credentials. |
 | **GitHub account** | To host the repository and run GitHub Actions. |
-| **Azure CLI** *(optional)* | If you want to verify provider registration or create VMs locally. [Install Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). |
+| **Azure CLI** | Required for the one-time bootstrap deployment. [Install Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli). |
 
 ### Required Azure Resource Providers
 
@@ -43,6 +43,7 @@ az provider register --namespace Microsoft.KeyVault --wait
 az provider register --namespace Microsoft.Storage --wait
 az provider register --namespace Microsoft.Network --wait
 az provider register --namespace Microsoft.ManagedIdentity --wait
+az provider register --namespace Microsoft.ContainerInstance --wait
 ```
 
 > **Note:** Provider registration can take a few minutes. The `--wait` flag blocks until complete.
@@ -96,12 +97,14 @@ az deployment sub create \
   --output table
 ```
 
+> **PowerShell users:** The `\` line continuation is bash syntax. In PowerShell, put the entire command on one line or use backtick (`` ` ``) at the end of each line instead.
+
 The command prints a clean table with the three values you need:
 
 ```
 AZURE_CLIENT_ID                       AZURE_TENANT_ID                       AZURE_SUBSCRIPTION_ID
 ------------------------------------  ------------------------------------  ------------------------------------
-e4e6b0d2-b207-4055-b8dc-b59a90762aa9  d967678a-e358-4218-9a75-5cc7ca5fdefb  1b2c6be0-ed07-4512-b69c-8c080c09c608
+a1b2c3d4-e5f6-7890-abcd-ef1234567890  11111111-2222-3333-4444-555555555555  aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
 ```
 
 #### 3. Copy the outputs into GitHub Secrets
@@ -148,7 +151,9 @@ If you prefer to set things up through the portal:
 
 > **Tip:** If you also run the workflow from other branches, add an additional federated credential for each branch.
 
-#### Grant the App Registration Contributor Access
+#### Grant the App Registration Access
+
+The App Registration needs **Contributor** and **User Access Administrator** on the subscription:
 
 1. Navigate to **Subscriptions → (your subscription) → Access control (IAM)**.
 2. Click **Add → Add role assignment**.
@@ -157,6 +162,7 @@ If you prefer to set things up through the portal:
    - **Assign access to:** User, group, or service principal
    - Click **Select members** and search for the App Registration name (e.g. `github-foundry-image-builder`).
 5. Click **Review + assign**.
+6. Repeat steps 2–5 for the **User Access Administrator** role.
 
 Alternatively via the Azure CLI:
 
@@ -164,6 +170,11 @@ Alternatively via the Azure CLI:
 az role assignment create \
   --assignee "<AZURE_CLIENT_ID>" \
   --role "Contributor" \
+  --scope "/subscriptions/<AZURE_SUBSCRIPTION_ID>"
+
+az role assignment create \
+  --assignee "<AZURE_CLIENT_ID>" \
+  --role "User Access Administrator" \
   --scope "/subscriptions/<AZURE_SUBSCRIPTION_ID>"
 ```
 
@@ -207,7 +218,8 @@ Under **Settings → Secrets and variables → Actions → Variables**, you can 
 | Variable Name | Default Value | Description |
 |---------------|---------------|-------------|
 | `AZURE_RESOURCE_GROUP` | `rg-foundry-image-gallery` | Resource group where all resources are deployed |
-| `AZURE_LOCATION` | `eastus` | Azure region for the deployment |
+| `AZURE_LOCATION` | `canadacentral` | Azure region for the deployment |
+| `AZURE_STAGING_RG_ID` | *(empty)* | Resource ID of a pre-created staging resource group. Set this if your Azure Policy blocks shared key access on storage accounts (see [Troubleshooting](#12-troubleshooting)). |
 
 > **Tip:** Choose a region that supports Azure Image Builder and Windows 11 images. Most major regions (eastus, westus2, westeurope, etc.) are supported.
 
@@ -215,13 +227,7 @@ Under **Settings → Secrets and variables → Actions → Variables**, you can 
 
 ## 6. Customise Gallery Metadata
 
-Copy the example file and fill in your values:
-
-```bash
-cp infra/main.bicepparam.example infra/main.bicepparam
-```
-
-Then edit `infra/main.bicepparam` to set your community gallery details:
+Edit `infra/main.bicepparam` to set your community gallery details. You **must** change the `galleryPublicNamePrefix` — the default `CHANGEME` will fail validation:
 
 ```bicep
 // Must be globally unique across all of Azure
@@ -356,8 +362,6 @@ Trigger a rebuild at any time from **Actions → Build Windows 11 + Foundry Loca
 
 To change gallery metadata, region, or replication settings, update `infra/main.bicepparam` and run the workflow again. The Bicep deployment is idempotent — it will update existing resources rather than recreating them.
 
-> `main.bicepparam` is git-ignored so your values are never committed.
-
 ---
 
 ## 12. Troubleshooting
@@ -373,6 +377,9 @@ To change gallery metadata, region, or replication settings, update `infra/main.
 | **Image build times out (>3 hours)** | Windows Update or network issues in the build VM | Check the Image Builder run status with `az image builder show --resource-group <rg> --name <template> --query lastRunStatus`. Retry the workflow. |
 | **"galleryPublicNamePrefix already in use"** | Prefix must be globally unique | Choose a different, unique prefix in `infra/main.bicepparam`. Must be 5–16 chars, alphanumeric only. |
 | **Image Builder fails with Contributor error** | RBAC hasn't propagated yet | The workflow includes a 90-second wait. If issues persist, manually re-run the failed workflow — RBAC should have propagated by then. |
+| **"Key based authentication is not permitted"** | Azure Policy blocks shared key access on storage accounts | Create a staging resource group with a policy exemption, then set the `AZURE_STAGING_RG_ID` GitHub Variable. See the [staging resource group](#5-configure-github-variables-optional) section. |
+| **"Microsoft.ContainerInstance/register" authorization error** | Container Instance provider not registered | The workflow registers it automatically. If the managed identity lacks permission, register it manually: `az provider register --namespace Microsoft.ContainerInstance --wait`. |
+| **"Update/Upgrade of image templates is not supported"** | Image Builder templates can't be updated in-place | The workflow deletes the template automatically before each run. If a previous run left a stale template, delete it manually: `az image builder delete --name flocal-win11-foundry-template --resource-group rg-foundry-image-gallery`. |
 
 ### Inspecting Build Logs
 

@@ -10,11 +10,12 @@ using './main.bicep'
 param namePrefix = 'flocal'
 
 // ── Community gallery metadata ────────────────────────────────────────────────
-// Update these values before your first deployment.
+// IMPORTANT: Update these values before your first deployment.
+// galleryPublicNamePrefix must be globally unique (5–16 chars, alphanumeric).
 
-param galleryPublicNamePrefix = 'FoundryLocal'
+param galleryPublicNamePrefix = 'CHANGEME'
 
-param publisherUri = 'https://github.com/aj-enns/Azure-FoundryLocal-ImageGallery'
+param publisherUri = 'https://github.com/your-username/Azure-FoundryLocal-ImageGallery'
 
 param publisherContact = 'gallery-owner@example.com'
 

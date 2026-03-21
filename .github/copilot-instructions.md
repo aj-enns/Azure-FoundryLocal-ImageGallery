@@ -12,8 +12,9 @@ Contributors and consumers range from first-time Azure users to experienced clou
 
 | Path | Purpose |
 |------|---------|
-| `infra/setup.bicep` + `setup.bicepparam.example` | One-time bootstrap (subscription-scoped): App Registration, OIDC federation, Contributor role. Users copy `.example` to `setup.bicepparam` (git-ignored). |
-| `infra/main.bicep` + `main.bicepparam.example` | Core infrastructure (resource-group-scoped): managed identity, Compute Gallery, Image Builder template. Users copy `.example` to `main.bicepparam` (git-ignored). |
+| `infra/setup.bicep` + `setup.bicepparam.example` | One-time bootstrap (subscription-scoped): App Registration, OIDC federation, Contributor + User Access Administrator roles. Users copy `.example` to `setup.bicepparam` (git-ignored). |
+| `infra/main.bicep` + `main.bicepparam` | Core infrastructure (resource-group-scoped): managed identity, Compute Gallery, Image Builder template. Checked in with safe defaults; subscription-specific values (e.g. staging RG) are overridden via GitHub Variables. |
+| `infra/bicepconfig.json` | Bicep CLI configuration — registers the Microsoft Graph dynamic extension for `appregistration.bicep`. |
 | `infra/modules/*.bicep` | Reusable Bicep modules (identity, gallery, imagebuilder, appregistration). |
 | `.github/workflows/build-image.yml` | GitHub Actions workflow — builds and publishes the VM image. |
 | `scripts/windows/` | PowerShell scripts executed inside the image (e.g. Foundry Local install). |

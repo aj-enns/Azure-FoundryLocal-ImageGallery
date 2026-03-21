@@ -28,14 +28,9 @@ on:
         required: false
         default: 'rg-foundry-image-gallery'
       location:
-        description: 'Azure region (e.g. eastus, westeurope)'
+        description: 'Azure region (e.g. canadacentral, westeurope)'
         required: false
         default: 'canadacentral'
-      force_rebuild:
-        description: 'Trigger a new image build even if the template already exists'
-        type: boolean
-        required: false
-        default: true
 
   # Rebuild automatically once a month to pick up the latest Windows Updates
   schedule:
@@ -160,14 +155,14 @@ jobs:
           echo "  Gallery        : $GALLERY_NAME"
           echo "  Image def      : $IMAGE_DEF_NAME"
 
-      # ── 6. Wait for RBAC propagation ─────────────────────────────────────────
+      # ── 7. Wait for RBAC propagation ─────────────────────────────────────────
       # Role assignments can take up to 5 minutes to propagate globally.
       - name: Wait for RBAC propagation
         run: |
           echo "Waiting 90 seconds for RBAC to propagate..."
           sleep 90
 
-      # ── 7. Trigger image build ────────────────────────────────────────────────
+      # ── 8. Trigger image build ────────────────────────────────────────────────
       - name: Trigger image build
         run: |
           az image builder run \
@@ -176,7 +171,7 @@ jobs:
             --no-wait
           echo "Image build triggered. Polling for completion..."
 
-      # ── 8. Poll until the build completes ────────────────────────────────────
+      # ── 9. Poll until the build completes ────────────────────────────────────
       - name: Wait for image build to complete
         run: |
           TEMPLATE="${{ steps.deploy.outputs.image_template_name }}"
@@ -218,7 +213,7 @@ jobs:
           echo "Timed out after ${MAX_WAIT} minutes waiting for image build."
           exit 1
 
-      # ── 9. Print image version summary ───────────────────────────────────────
+      # ── 10. Print image version summary ───────────────────────────────────────
       - name: Summarise published image
         if: success()
         run: |
@@ -243,7 +238,7 @@ jobs:
             --output                    table        >> "$GITHUB_STEP_SUMMARY"
           echo '```'                        >> "$GITHUB_STEP_SUMMARY"
 
-      # ── 10. Azure logout ─────────────────────────────────────────────────────
+      # ── 11. Azure logout ─────────────────────────────────────────────────────
       - name: Logout from Azure
         if: always()
         run: az logout

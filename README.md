@@ -24,9 +24,11 @@ az deployment sub create \
 
 # 3. Copy the three output values from the table into GitHub Secrets
 
-# 4. Copy and edit infra/main.bicepparam.example → infra/main.bicepparam, then:
+# 4. Edit infra/main.bicepparam with your gallery metadata, then:
 #    Actions → Build Windows 11 + Foundry Local Image → Run workflow
 ```
+
+> **PowerShell users:** The `\` line continuation is bash syntax. In PowerShell, put the entire command on one line or use backtick (`` ` ``) at the end of each line instead.
 
 ---
 
@@ -56,7 +58,8 @@ az deployment sub create \
 │   ├── setup.bicep                      # One-time bootstrap (subscription-scoped)
 │   ├── setup.bicepparam.example         # Bootstrap parameter template (copy to setup.bicepparam)
 │   ├── main.bicep                       # Core infrastructure (resource-group-scoped)
-│   ├── main.bicepparam.example           # Infrastructure parameter template (copy to main.bicepparam)
+│   ├── main.bicepparam                  # Infrastructure parameter defaults (edit before first deploy)
+│   ├── bicepconfig.json                 # Bicep extension configuration (Microsoft Graph)
 │   └── modules/
 │       ├── appregistration.bicep        # App Registration + OIDC federation
 │       ├── identity.bicep               # User-assigned managed identity + RBAC
@@ -92,7 +95,7 @@ Deploy `infra/setup.bicep` to create:
 
 - An **App Registration** in Entra ID
 - A **Federated Identity Credential** for GitHub Actions OIDC (no stored secrets)
-- A **Service Principal** with **Contributor** on the subscription
+- A **Service Principal** with **Contributor** and **User Access Administrator** on the subscription
 
 Then copy the three deployment outputs into **GitHub Secrets** (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`).
 
@@ -152,3 +155,7 @@ The workflow runs automatically on the **1st of every month** at 03:00 UTC to pi
 ## Contributing
 
 Pull requests are welcome. Please open an issue first to discuss significant changes.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
