@@ -25,6 +25,9 @@ param replicationRegions array = [location]
 @description('Resource tags applied to the image template.')
 param tags object = {}
 
+@description('Resource ID of a pre-created resource group for Image Builder staging resources. If empty, Image Builder creates a temporary one. Specify this when Azure Policy blocks shared key access on storage accounts — you can exempt this RG from that policy.')
+param stagingResourceGroupId string = ''
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Image Builder template
 // API 2024-02-01 supports Trusted Launch VMs as the build VM which is required
@@ -46,6 +49,10 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01
   properties: {
     // Allow up to 3 hours for the build (Windows Update can be slow).
     buildTimeoutInMinutes: 180
+
+    // Use a dedicated staging resource group so it can be exempted from
+    // Azure Policies that block storage-account shared key access.
+    stagingResourceGroup: !empty(stagingResourceGroupId) ? stagingResourceGroupId : null
 
     vmProfile: {
       // D8ads_v5: 8 vCPU / 32 GiB – provides enough headroom for Foundry Local

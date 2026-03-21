@@ -50,6 +50,9 @@ param eula string
 @description('Additional Azure regions to replicate the image version into (primary region is always included).')
 param additionalReplicationRegions array = []
 
+@description('Resource ID of a pre-created resource group for Image Builder staging. Leave empty to auto-create. Set this if Azure Policy blocks shared key access on storage accounts.')
+param stagingResourceGroupId string = ''
+
 // ── Tags ──────────────────────────────────────────────────────────────────────
 
 @description('Tags applied to every resource deployed by this template.')
@@ -93,6 +96,7 @@ module imageBuilder 'modules/imagebuilder.bicep' = {
     managedIdentityId: identity.outputs.identityId
     galleryImageDefinitionId: gallery.outputs.imageDefinitionId
     replicationRegions: union([location], additionalReplicationRegions)
+    stagingResourceGroupId: stagingResourceGroupId
     tags: tags
   }
 }
