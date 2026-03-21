@@ -83,12 +83,15 @@ module appRegistration 'modules/appregistration.bicep' = {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Contributor role assignment at subscription scope
+// Role assignments at subscription scope
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Built-in Contributor role definition ID
+// Built-in role definition IDs
 var contributorRoleId = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
+var userAccessAdminRoleId = '18d7d88d-d35e-4fb5-a5c3-7773c20a72d9'
 
+// Contributor – allows the workflow to create resource groups, deploy Bicep
+// resources (gallery, image builder, managed identity, etc.).
 resource contributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   // guid() inputs must be known at deployment start — use the app display name
   // (a parameter) instead of the runtime service principal object ID.
@@ -97,6 +100,20 @@ resource contributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022
     roleDefinitionId: subscriptionResourceId(
       'Microsoft.Authorization/roleDefinitions',
       contributorRoleId
+    )
+    principalId: appRegistration.outputs.servicePrincipalObjectId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+// User Access Administrator – allows the workflow to create role assignments
+// (e.g. granting the managed identity Contributor on the resource group).
+resource userAccessAdminRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(subscription().id, appDisplayName, userAccessAdminRoleId)
+  properties: {
+    roleDefinitionId: subscriptionResourceId(
+      'Microsoft.Authorization/roleDefinitions',
+      userAccessAdminRoleId
     )
     principalId: appRegistration.outputs.servicePrincipalObjectId
     principalType: 'ServicePrincipal'
