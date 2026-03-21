@@ -24,7 +24,7 @@ az deployment sub create \
 
 # 3. Copy the three output values from the table into GitHub Secrets
 
-# 4. Update infra/main.bicepparam with your gallery metadata, then:
+# 4. Copy and edit infra/main.bicepparam.example → infra/main.bicepparam, then:
 #    Actions → Build Windows 11 + Foundry Local Image → Run workflow
 ```
 
@@ -56,7 +56,7 @@ az deployment sub create \
 │   ├── setup.bicep                      # One-time bootstrap (subscription-scoped)
 │   ├── setup.bicepparam.example         # Bootstrap parameter template (copy to setup.bicepparam)
 │   ├── main.bicep                       # Core infrastructure (resource-group-scoped)
-│   ├── main.bicepparam                  # Infrastructure parameter defaults
+│   ├── main.bicepparam.example           # Infrastructure parameter template (copy to main.bicepparam)
 │   └── modules/
 │       ├── appregistration.bicep        # App Registration + OIDC federation
 │       ├── identity.bicep               # User-assigned managed identity + RBAC

@@ -215,7 +215,13 @@ Under **Settings → Secrets and variables → Actions → Variables**, you can 
 
 ## 6. Customise Gallery Metadata
 
-Edit `infra/main.bicepparam` to set your community gallery details:
+Copy the example file and fill in your values:
+
+```bash
+cp infra/main.bicepparam.example infra/main.bicepparam
+```
+
+Then edit `infra/main.bicepparam` to set your community gallery details:
 
 ```bicep
 // Must be globally unique across all of Azure
@@ -350,6 +356,8 @@ Trigger a rebuild at any time from **Actions → Build Windows 11 + Foundry Loca
 
 To change gallery metadata, region, or replication settings, update `infra/main.bicepparam` and run the workflow again. The Bicep deployment is idempotent — it will update existing resources rather than recreating them.
 
+> `main.bicepparam` is git-ignored so your values are never committed.
+
 ---
 
 ## 12. Troubleshooting
@@ -363,7 +371,7 @@ To change gallery metadata, region, or replication settings, update `infra/main.
 | **"Federated credential not found"** | Branch name mismatch | Ensure the federated credential in Azure AD matches the branch name the workflow runs from (e.g. `main`). |
 | **Provider registration fails** | Subscription doesn't support the provider | Some providers require specific subscription types. Check `az provider show --namespace Microsoft.VirtualMachineImages` for registration state. |
 | **Image build times out (>3 hours)** | Windows Update or network issues in the build VM | Check the Image Builder run status with `az image builder show --resource-group <rg> --name <template> --query lastRunStatus`. Retry the workflow. |
-| **"galleryPublicNamePrefix already in use"** | Prefix must be globally unique | Choose a different, unique prefix in `infra/main.bicepparam`. |
+| **"galleryPublicNamePrefix already in use"** | Prefix must be globally unique | Choose a different, unique prefix in `infra/main.bicepparam`. Must be 5–16 chars, alphanumeric only. |
 | **Image Builder fails with Contributor error** | RBAC hasn't propagated yet | The workflow includes a 90-second wait. If issues persist, manually re-run the failed workflow — RBAC should have propagated by then. |
 
 ### Inspecting Build Logs

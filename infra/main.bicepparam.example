@@ -1,7 +1,11 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// main.bicepparam
-// Default parameter values for the Azure-FoundryLocal-ImageGallery deployment.
-// Override any value here or pass --parameters on the az CLI / in the workflow.
+// main.bicepparam.example
+// Copy this file to main.bicepparam and fill in your values.
+// main.bicepparam is git-ignored so your settings stay local.
+//
+// Usage:
+//   cp infra/main.bicepparam.example infra/main.bicepparam
+//   # Edit infra/main.bicepparam with your values
 // ─────────────────────────────────────────────────────────────────────────────
 
 using './main.bicep'
@@ -12,11 +16,11 @@ param namePrefix = 'flocal'
 // ── Community gallery metadata ────────────────────────────────────────────────
 // Update these values before your first deployment.
 
-param galleryPublicNamePrefix = 'FoundryLocal'
+param galleryPublicNamePrefix = '<your-unique-prefix>'   // 5–16 chars, alphanumeric only
 
-param publisherUri = 'https://github.com/aj-enns/Azure-FoundryLocal-ImageGallery'
+param publisherUri = 'https://github.com/<your-username>'
 
-param publisherContact = 'gallery-owner@example.com'
+param publisherContact = '<your-email@example.com>'
 
 param eula = 'By using images from this gallery you accept that they are provided as-is without warranty. Azure Foundry Local is subject to the Microsoft Software License Terms.'
 
@@ -27,7 +31,8 @@ param additionalReplicationRegions = []
 // ── Image Builder staging ─────────────────────────────────────────────────────
 // Pre-created resource group for Image Builder staging resources. Required when
 // Azure Policy blocks shared key access on storage accounts — exempt this RG.
-param stagingResourceGroupId = '/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging'
+// Leave empty if your subscription does not have such a policy.
+param stagingResourceGroupId = ''
 
 // ── Tags ──────────────────────────────────────────────────────────────────────
 param tags = {
