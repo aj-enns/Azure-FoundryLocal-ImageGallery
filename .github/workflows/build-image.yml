@@ -31,6 +31,11 @@ on:
         description: 'Azure region (e.g. canadacentral, westeurope)'
         required: false
         default: 'canadacentral'
+      apply_windows_update:
+        description: 'Apply Windows Updates during the build (disable to speed up test builds)'
+        type: boolean
+        required: false
+        default: true
 
   # Rebuild automatically once a month to pick up the latest Windows Updates
   schedule:
@@ -128,11 +133,15 @@ jobs:
             STAGING_ARGS="--parameters stagingResourceGroupId=${{ vars.AZURE_STAGING_RG_ID }}"
           fi
 
+          # Default to true for scheduled runs; use the input value for manual runs
+          APPLY_WU="${{ github.event.inputs.apply_windows_update || 'true' }}"
+
           DEPLOY_OUTPUT=$(az deployment group create \
             --resource-group "${{ env.RESOURCE_GROUP }}" \
             --template-file  infra/main.bicep \
             --parameters     infra/main.bicepparam \
             --parameters     location="${{ env.LOCATION }}" \
+            --parameters     applyWindowsUpdate=$APPLY_WU \
             $STAGING_ARGS \
             --name           "deploy-$(date +%Y%m%d%H%M%S)" \
             --query          properties.outputs \
@@ -176,7 +185,7 @@ jobs:
         run: |
           TEMPLATE="${{ steps.deploy.outputs.image_template_name }}"
           RG="${{ env.RESOURCE_GROUP }}"
-          MAX_WAIT=310   # minutes — slightly more than buildTimeoutInMinutes (300) so we always see Image Builder's final state
+          MAX_WAIT=120   # minutes
           INTERVAL=5     # minutes between polls
           ELAPSED=0
 

@@ -28,6 +28,9 @@ param tags object = {}
 @description('Resource ID of a pre-created resource group for Image Builder staging resources. If empty, Image Builder creates a temporary one. Specify this when Azure Policy blocks shared key access on storage accounts — you can exempt this RG from that policy.')
 param stagingResourceGroupId string = ''
 
+@description('Whether to apply Windows Updates during the build. Set to false to speed up test builds.')
+param applyWindowsUpdate bool = true
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Image Builder template
 // API 2024-02-01 supports Trusted Launch VMs as the build VM which is required
@@ -35,10 +38,8 @@ param stagingResourceGroupId string = ''
 //
 // Windows Update strategy
 // ───────────────────────
-// • Two passes of WindowsUpdate are run with a restart between each.
-//   Two passes are enough: the first installs all currently-available patches;
-//   the second catches any updates that only become visible after the first
-//   batch is rebooted into.
+// • A single pass of WindowsUpdate is run followed by a restart.
+//   Monthly rebuilds will catch any remaining updates from the previous cycle.
 // • The filter uses AutoSelectOnWebSites (= true for security, critical, and
 //   important updates) rather than include:$true.  Omitting this filter
 //   caused large optional driver/feature packages (often 1–3 GB each) to be
@@ -48,6 +49,75 @@ param stagingResourceGroupId string = ''
 //   per pass; on a fresh image after Patch Tuesday there can be 100+ pending
 //   updates, so a low cap leaves the image partially patched.
 // ─────────────────────────────────────────────────────────────────────────────
+
+// ── Customization step arrays (combined conditionally below) ─────────────────
+
+var foundryInstallSteps = [
+  {
+    type: 'PowerShell'
+    name: 'InstallFoundryLocal'
+    runElevated: true
+    inline: [
+      '[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12'
+      '$ErrorActionPreference = "Stop"'
+      'Write-Host "Refreshing winget sources..."'
+      'winget source update --disable-interactivity'
+      'Write-Host "Installing Azure Foundry Local..."'
+      'winget install Microsoft.FoundryLocal --accept-package-agreements --accept-source-agreements --silent --disable-interactivity'
+      'if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -ne -1978335189) { throw "Foundry Local install failed – winget exit code: $LASTEXITCODE" }'
+      'Write-Host "Azure Foundry Local installation complete."'
+    ]
+  }
+  {
+    type: 'WindowsRestart'
+    restartCheckCommand: 'echo Restart after Foundry Local install complete.'
+    restartTimeout: '10m'
+  }
+]
+
+var windowsUpdateSteps = [
+  {
+    type: 'WindowsUpdate'
+    searchCriteria: 'IsInstalled=0'
+    filters: [
+      'exclude:$_.Title -like \'\'*Preview*\'\''
+      'include:$_.AutoSelectOnWebSites -eq $true'
+    ]
+  }
+  {
+    type: 'WindowsRestart'
+    restartCheckCommand: 'echo Restart after Windows Update complete.'
+    restartTimeout: '15m'
+  }
+  {
+    type: 'PowerShell'
+    name: 'LogWindowsUpdateStatus'
+    runElevated: true
+    inline: [
+      'Write-Host "=== Windows Update Log (last 20 events) ==="'
+      'wevtutil qe System /q:"*[System[Provider[@Name=\'Microsoft-Windows-WindowsUpdateClient\']]]" /f:text /c:20'
+      'Write-Host "=== End Windows Update Log ==="'
+    ]
+  }
+]
+
+var cleanupSteps = [
+  {
+    type: 'PowerShell'
+    name: 'CleanupTempFiles'
+    runElevated: true
+    inline: [
+      'Write-Host "Cleaning up temporary files..."'
+      'Remove-Item -Path "$env:TEMP\\*" -Recurse -Force -ErrorAction SilentlyContinue'
+      'Remove-Item -Path "C:\\Windows\\Temp\\*" -Recurse -Force -ErrorAction SilentlyContinue'
+      'Write-Host "Cleanup complete."'
+    ]
+  }
+]
+
+var customizeSteps = applyWindowsUpdate
+  ? concat(foundryInstallSteps, windowsUpdateSteps, cleanupSteps)
+  : concat(foundryInstallSteps, cleanupSteps)
 
 resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01' = {
   name: imageTemplateName
@@ -66,7 +136,7 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01
     // image can have 100+ security and important patches pending (especially
     // in the week after Patch Tuesday).  Add time for Foundry Local install,
     // two reboots, cleanup, and gallery distribution.
-    buildTimeoutInMinutes: 300
+    buildTimeoutInMinutes: 120
 
     // Use a dedicated staging resource group so it can be exempted from
     // Azure Policies that block storage-account shared key access.
@@ -88,89 +158,8 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01
       version: 'latest'
     }
 
-    // ── Customization steps ───────────────────────────────────────────────────
-    customize: [
-
-      // 1. Install Azure Foundry Local via winget.
-      //    Each array element is a separate PowerShell statement.
-      {
-        type: 'PowerShell'
-        name: 'InstallFoundryLocal'
-        runElevated: true
-        inline: [
-          '[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12'
-          '$ErrorActionPreference = "Stop"'
-          'Write-Host "Refreshing winget sources..."'
-          'winget source update --disable-interactivity'
-          'Write-Host "Installing Azure Foundry Local..."'
-          'winget install Microsoft.FoundryLocal --accept-package-agreements --accept-source-agreements --silent --disable-interactivity'
-          'if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -ne -1978335189) { throw "Foundry Local install failed – winget exit code: $LASTEXITCODE" }'
-          'Write-Host "Azure Foundry Local installation complete."'
-        ]
-      }
-
-      // 2. Restart to finalise the Foundry Local installation.
-      {
-        type: 'WindowsRestart'
-        restartCheckCommand: 'echo Restart after Foundry Local install complete.'
-        restartTimeout: '10m'
-      }
-
-      // 3. Apply all available security / critical / important Windows Updates.
-      //    AutoSelectOnWebSites = true means "recommended for automatic install",
-      //    which covers security, critical, and important updates but skips large
-      //    optional driver and feature packages that inflate build time.
-      //    updateLimit is omitted to use the default (1,000) — a low cap causes
-      //    the image to be left partially patched when there are many updates.
-      {
-        type: 'WindowsUpdate'
-        searchCriteria: 'IsInstalled=0'
-        filters: [
-          'exclude:$_.Title -like \'\'*Preview*\'\''
-          'include:$_.AutoSelectOnWebSites -eq $true'
-        ]
-      }
-
-      // 4. Restart after Windows Update (first pass).
-      {
-        type: 'WindowsRestart'
-        restartCheckCommand: 'echo Restart after Windows Update pass 1 complete.'
-        restartTimeout: '15m'
-      }
-
-      // 5. Apply a second round of Windows Updates (same recommended-only filter).
-      //    Some updates only become available after a reboot installs earlier ones.
-      {
-        type: 'WindowsUpdate'
-        searchCriteria: 'IsInstalled=0'
-        filters: [
-          'exclude:$_.Title -like \'\'*Preview*\'\''
-          'include:$_.AutoSelectOnWebSites -eq $true'
-        ]
-      }
-
-      // 6. Restart after Windows Update (second pass).
-      {
-        type: 'WindowsRestart'
-        restartCheckCommand: 'echo Restart after Windows Update pass 2 complete.'
-        restartTimeout: '15m'
-      }
-
-      // 7. Run a final sysprep-prepare cleanup so the image is generalised
-      //    cleanly (Image Builder calls sysprep automatically, but this
-      //    ensures temporary files are removed first).
-      {
-        type: 'PowerShell'
-        name: 'CleanupTempFiles'
-        runElevated: true
-        inline: [
-          'Write-Host "Cleaning up temporary files..."'
-          'Remove-Item -Path "$env:TEMP\\*" -Recurse -Force -ErrorAction SilentlyContinue'
-          'Remove-Item -Path "C:\\Windows\\Temp\\*" -Recurse -Force -ErrorAction SilentlyContinue'
-          'Write-Host "Cleanup complete."'
-        ]
-      }
-    ]
+    // ── Customization steps (built from variables above) ─────────────────────
+    customize: customizeSteps
 
     // ── Distribution target ───────────────────────────────────────────────────
     distribute: [

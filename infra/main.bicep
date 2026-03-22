@@ -53,6 +53,9 @@ param additionalReplicationRegions array = []
 @description('Resource ID of a pre-created resource group for Image Builder staging. Leave empty to auto-create. Set this if Azure Policy blocks shared key access on storage accounts.')
 param stagingResourceGroupId string = ''
 
+@description('Whether to apply Windows Updates during the image build. Disable to speed up test builds.')
+param applyWindowsUpdate bool = true
+
 // ── Tags ──────────────────────────────────────────────────────────────────────
 
 @description('Tags applied to every resource deployed by this template.')
@@ -97,6 +100,7 @@ module imageBuilder 'modules/imagebuilder.bicep' = {
     galleryImageDefinitionId: gallery.outputs.imageDefinitionId
     replicationRegions: union([location], additionalReplicationRegions)
     stagingResourceGroupId: stagingResourceGroupId
+    applyWindowsUpdate: applyWindowsUpdate
     tags: tags
   }
 }
