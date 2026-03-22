@@ -51,6 +51,9 @@ param applyWindowsUpdate bool = true
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Customization step arrays (combined conditionally below) ─────────────────
+// Each major step is bookended with timestamped Write-Host messages so the
+// customization.log shows exactly which step was running when a timeout or
+// failure occurred.
 
 var foundryInstallSteps = [
   {
@@ -60,22 +63,32 @@ var foundryInstallSteps = [
     inline: [
       '[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12'
       '$ErrorActionPreference = "Stop"'
+      'Write-Host "[$(Get-Date -f o)] === STEP: Install Foundry Local — START ==="'
       'Write-Host "Refreshing winget sources..."'
       'winget source update --disable-interactivity'
       'Write-Host "Installing Azure Foundry Local..."'
       'winget install Microsoft.FoundryLocal --accept-package-agreements --accept-source-agreements --silent --disable-interactivity'
       'if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -ne -1978335189) { throw "Foundry Local install failed – winget exit code: $LASTEXITCODE" }'
-      'Write-Host "Azure Foundry Local installation complete."'
+      'Write-Host "[$(Get-Date -f o)] === STEP: Install Foundry Local — COMPLETE ==="'
     ]
   }
   {
     type: 'WindowsRestart'
-    restartCheckCommand: 'echo Restart after Foundry Local install complete.'
+    restartCheckCommand: 'Write-Host "[$(Get-Date -f o)] === STEP: Reboot after Foundry Local — COMPLETE ==="'
     restartTimeout: '10m'
   }
 ]
 
 var windowsUpdateSteps = [
+  {
+    type: 'PowerShell'
+    name: 'PreWindowsUpdateLog'
+    runElevated: true
+    inline: [
+      'Write-Host "[$(Get-Date -f o)] === STEP: Windows Update — START ==="'
+      'Write-Host "Searching for available updates (AutoSelectOnWebSites only, excluding Preview)..."'
+    ]
+  }
   {
     type: 'WindowsUpdate'
     searchCriteria: 'IsInstalled=0'
@@ -85,8 +98,16 @@ var windowsUpdateSteps = [
     ]
   }
   {
+    type: 'PowerShell'
+    name: 'PostWindowsUpdateLog'
+    runElevated: true
+    inline: [
+      'Write-Host "[$(Get-Date -f o)] === STEP: Windows Update — COMPLETE, rebooting ==="'
+    ]
+  }
+  {
     type: 'WindowsRestart'
-    restartCheckCommand: 'echo Restart after Windows Update complete.'
+    restartCheckCommand: 'Write-Host "[$(Get-Date -f o)] === STEP: Reboot after Windows Update — COMPLETE ==="'
     restartTimeout: '15m'
   }
   {
@@ -94,9 +115,9 @@ var windowsUpdateSteps = [
     name: 'LogWindowsUpdateStatus'
     runElevated: true
     inline: [
-      'Write-Host "=== Windows Update Log (last 20 events) ==="'
+      'Write-Host "[$(Get-Date -f o)] === STEP: Log Windows Update events — START ==="'
       'wevtutil qe System /q:"*[System[Provider[@Name=\'Microsoft-Windows-WindowsUpdateClient\']]]" /f:text /c:20'
-      'Write-Host "=== End Windows Update Log ==="'
+      'Write-Host "[$(Get-Date -f o)] === STEP: Log Windows Update events — COMPLETE ==="'
     ]
   }
 ]
@@ -107,10 +128,10 @@ var cleanupSteps = [
     name: 'CleanupTempFiles'
     runElevated: true
     inline: [
-      'Write-Host "Cleaning up temporary files..."'
+      'Write-Host "[$(Get-Date -f o)] === STEP: Cleanup temp files — START ==="'
       'Remove-Item -Path "$env:TEMP\\*" -Recurse -Force -ErrorAction SilentlyContinue'
       'Remove-Item -Path "C:\\Windows\\Temp\\*" -Recurse -Force -ErrorAction SilentlyContinue'
-      'Write-Host "Cleanup complete."'
+      'Write-Host "[$(Get-Date -f o)] === STEP: Cleanup temp files — COMPLETE ==="'
     ]
   }
 ]
