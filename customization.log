@@ -1,0 +1,292 @@
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 [INFO] Packer version: 1.15.0 [go1.24.12 linux amd64]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 [INFO] PACKER_CONFIG env var not set; checking the default config file path
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 [INFO] PACKER_CONFIG env var set; attempting to open config file: /root/.packerconfig
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 [WARN] Config file doesn't exist: /root/.packerconfig
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 [INFO] Setting cache directory: /root/.cache/packer
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER e: Running in background, not using a TTY
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 [TRACE] listing potential installations for <nil> that match "". plugingetter.ListInstallationsOptions{PluginDirectory:"/root/.config/packer/plugins", BinaryInstallationOptions:plugingetter.BinaryInstallationOptions{APIVersionMajor:"5", APIVersionMinor:"0", OS:"linux", ARCH:"amd64", Ext:"", Checksummers:[]plugingetter.Checksummer{plugingetter.Checksummer{Type:"sha256", Hash:(*sha256.Digest)(0xc000753280)}}, ReleasesOnly:false}}
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 [INFO] found external [arm chroot dtl] builders from azure plugin
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 found external [dtlartifact] provisioner from azure plugin
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 found external [keyvaultsecret] datasource from azure plugin
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 found external [-packer-default-plugin-name-] provisioner from windows-update plugin
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 [TRACE] Using protobuf for communication with plugins
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 [INFO] Starting external plugin /root/.config/packer/plugins/github.com/hashicorp/azure/packer-plugin-azure_v2.5.2_x5.0_linux_amd64 start builder --protobuf arm
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Starting plugin: /root/.config/packer/plugins/github.com/hashicorp/azure/packer-plugin-azure_v2.5.2_x5.0_linux_amd64 []string{"/root/.config/packer/plugins/github.com/hashicorp/azure/packer-plugin-azure_v2.5.2_x5.0_linux_amd64", "start", "builder", "--protobuf", "arm"}
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Waiting for RPC address for: /root/.config/packer/plugins/github.com/hashicorp/azure/packer-plugin-azure_v2.5.2_x5.0_linux_amd64
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 Plugin address: unix /tmp/packer-plugin4122708702
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Received unix RPC address for /root/.config/packer/plugins/github.com/hashicorp/azure/packer-plugin-azure_v2.5.2_x5.0_linux_amd64: addr is /tmp/packer-plugin4122708702
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 Waiting for connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 Serving a plugin connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 [TRACE] starting builder arm
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 [INFO] Starting external plugin /aib/packerInput/packer execute --protobuf packer-provisioner-file
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Starting plugin: /aib/packerInput/packer []string{"/aib/packerInput/packer", "execute", "--protobuf", "packer-provisioner-file"}
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Waiting for RPC address for: /aib/packerInput/packer
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-file plugin: [INFO] Packer version: 1.15.0 [go1.24.12 linux amd64]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-file plugin: [INFO] PACKER_CONFIG env var not set; checking the default config file path
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-file plugin: [INFO] PACKER_CONFIG env var set; attempting to open config file: /root/.packerconfig
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-file plugin: [WARN] Config file doesn't exist: /root/.packerconfig
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-file plugin: [INFO] Setting cache directory: /root/.cache/packer
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Received unix RPC address for /aib/packerInput/packer: addr is /tmp/packer-plugin3423222868
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-file plugin: Plugin address: unix /tmp/packer-plugin3423222868
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-file plugin: Waiting for connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-file plugin: Serving a plugin connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 [INFO] Starting external plugin /aib/packerInput/packer execute --protobuf packer-provisioner-powershell
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Starting plugin: /aib/packerInput/packer []string{"/aib/packerInput/packer", "execute", "--protobuf", "packer-provisioner-powershell"}
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Waiting for RPC address for: /aib/packerInput/packer
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [INFO] Packer version: 1.15.0 [go1.24.12 linux amd64]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [INFO] PACKER_CONFIG env var not set; checking the default config file path
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [INFO] PACKER_CONFIG env var set; attempting to open config file: /root/.packerconfig
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [WARN] Config file doesn't exist: /root/.packerconfig
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [INFO] Setting cache directory: /root/.cache/packer
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Plugin address: unix /tmp/packer-plugin651122254
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Waiting for connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Received unix RPC address for /aib/packerInput/packer: addr is /tmp/packer-plugin651122254
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Serving a plugin connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 [INFO] Starting external plugin /aib/packerInput/packer execute --protobuf packer-provisioner-windows-restart
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Starting plugin: /aib/packerInput/packer []string{"/aib/packerInput/packer", "execute", "--protobuf", "packer-provisioner-windows-restart"}
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Waiting for RPC address for: /aib/packerInput/packer
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-windows-restart plugin: [INFO] Packer version: 1.15.0 [go1.24.12 linux amd64]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-windows-restart plugin: [INFO] PACKER_CONFIG env var not set; checking the default config file path
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-windows-restart plugin: [INFO] PACKER_CONFIG env var set; attempting to open config file: /root/.packerconfig
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-windows-restart plugin: [WARN] Config file doesn't exist: /root/.packerconfig
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-windows-restart plugin: [INFO] Setting cache directory: /root/.cache/packer
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-windows-restart plugin: Plugin address: unix /tmp/packer-plugin2876321802
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-windows-restart plugin: Waiting for connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Received unix RPC address for /aib/packerInput/packer: addr is /tmp/packer-plugin2876321802
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-windows-restart plugin: Serving a plugin connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 [INFO] Starting external plugin /aib/packerInput/packer execute --protobuf packer-provisioner-powershell
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Starting plugin: /aib/packerInput/packer []string{"/aib/packerInput/packer", "execute", "--protobuf", "packer-provisioner-powershell"}
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Waiting for RPC address for: /aib/packerInput/packer
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [INFO] Packer version: 1.15.0 [go1.24.12 linux amd64]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [INFO] PACKER_CONFIG env var not set; checking the default config file path
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [INFO] PACKER_CONFIG env var set; attempting to open config file: /root/.packerconfig
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [WARN] Config file doesn't exist: /root/.packerconfig
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [INFO] Setting cache directory: /root/.cache/packer
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Received unix RPC address for /aib/packerInput/packer: addr is /tmp/packer-plugin1721789865
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Plugin address: unix /tmp/packer-plugin1721789865
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Waiting for connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Serving a plugin connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 [INFO] Starting external plugin /aib/packerInput/packer execute --protobuf packer-provisioner-powershell
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Starting plugin: /aib/packerInput/packer []string{"/aib/packerInput/packer", "execute", "--protobuf", "packer-provisioner-powershell"}
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Waiting for RPC address for: /aib/packerInput/packer
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [INFO] Packer version: 1.15.0 [go1.24.12 linux amd64]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [INFO] PACKER_CONFIG env var not set; checking the default config file path
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [INFO] PACKER_CONFIG env var set; attempting to open config file: /root/.packerconfig
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [WARN] Config file doesn't exist: /root/.packerconfig
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: [INFO] Setting cache directory: /root/.cache/packer
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Received unix RPC address for /aib/packerInput/packer: addr is /tmp/packer-plugin805139153
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Plugin address: unix /tmp/packer-plugin805139153
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Waiting for connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Serving a plugin connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Preparing build: azure-arm
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 Error looking up environment using metadata host: retrieving metadata from endpoint "management.azure.com": performing request: Get "management.azure.com/metadata/endpoints?[REDACTED]": unsupported protocol scheme "".
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: Falling back to hardcoded mechanism...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 Error looking up environment using metadata host: retrieving metadata from endpoint "management.azure.com": performing request: Get "management.azure.com/metadata/endpoints?[REDACTED]": unsupported protocol scheme "".
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: Falling back to hardcoded mechanism...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Using inline default execute command powershell -executionpolicy bypass -file {{.Path}}
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Using inline default elevated execute command powershell -executionpolicy bypass -file {{.Path}}
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Using inline default execute command powershell -executionpolicy bypass -file {{.Path}}
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Using inline default elevated execute command powershell -executionpolicy bypass -file {{.Path}}
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Using inline default execute command powershell -executionpolicy bypass -file {{.Path}}
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-provisioner-powershell plugin: Using inline default elevated execute command powershell -executionpolicy bypass -file {{.Path}}
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 ui: azure-arm: output will be in this color.
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 ui: 
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Build debug mode: false
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Force build: false
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 On error: cleanup
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Waiting on builds to complete...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Starting build run: azure-arm
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 Running builder: azure-arm
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 ui: ==> azure-arm: Running builder ...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 :: Configuration
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 CaptureNamePrefix=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 CaptureContainerName=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 SharedGalleryImageVersionEndOfLifeDate=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 ImagePublisher=MicrosoftWindowsDesktop
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 ImageOffer=windows-11
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 ImageSku=win11-24h2-ent
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 ImageVersion=26100.8037.260306
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 ImageUrl=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 CustomManagedImageName=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 CustomManagedImageResourceGroupName=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 Location=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 VMSize=Standard_D8ads_v5
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 ManagedImageResourceGroupName=rg-foundry-image-staging
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 ManagedImageName=packerImg_20260322125950
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 ManagedImageStorageAccountType=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 ManagedImageOSDiskSnapshotName=packerImg_20260322125950_os_disk
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 ManagedImageDataDiskSnapshotPrefix=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 ResourceGroupName=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 StorageAccount=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 TempComputeName=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 TempNicName=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 TempResourceGroupName=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 BuildResourceGroupName=rg-foundry-image-staging
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 BuildKeyVaultName=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 BuildKeyVaultSecretName=********************
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 BuildKeyVaultSKU=standard
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 DiskEncryptionSetId=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 VirtualNetworkName=aibvnetp2lb8
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 VirtualNetworkSubnetName=remotesubnet
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 VirtualNetworkResourceGroupName=rg-foundry-image-staging
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 CustomDataFile=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 CustomData=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 UserDataFile=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 UserData=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 CustomScript=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 OSType=Windows
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 TempOSDiskName=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 DiskCachingType=None
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 BootDiagSTGAccount=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 CustomResourcePrefix=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 LicenseType=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 PublicIpSKU=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 SecurityType=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 SecurityEncryptionType=
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 UserName=packer
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 Password=********************************
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 ui: ==> azure-arm: Creating Azure Resource Manager (ARM) client ...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:04 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:04 [DEBUG] POST https://login.microsoftonline.com/d967678a-e358-4218-9a75-5cc7ca5fdefb/oauth2/v2.0/token
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 ui: ==> azure-arm: ARM Client successfully created
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:05 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:05 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging/providers/Microsoft.Compute/images/packerImg_20260322125950?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:05 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging/providers/Microsoft.Compute/snapshots/packerImg_20260322125950_os_disk?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:05 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 ui: ==> azure-arm: Getting source image id for the deployment ...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 ui: ==> azure-arm:  -> SourceImageName: '/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/providers/Microsoft.Compute/locations/canadacentral/publishers/MicrosoftWindowsDesktop/ArtifactTypes/vmimage/offers/windows-11/skus/win11-24h2-ent/versions/26100.8037.260306'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:05 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 ui: ==> azure-arm: Using existing resource group ...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 ui: ==> azure-arm:  -> ResourceGroupName : 'rg-foundry-image-staging'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 ui: ==> azure-arm:  -> Location          : 'canadacentral'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 ui: ==> azure-arm: Validating deployment template ...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 ui: ==> azure-arm:  -> ResourceGroupName : 'rg-foundry-image-staging'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 ui: ==> azure-arm:  -> DeploymentName    : 'kvpkrdpae88ahyc10'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:05 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:05 [DEBUG] POST https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/kvpkrdpae88ahyc10/validate?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:06 ui: ==> azure-arm: Deploying deployment template ...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:06 ui: ==> azure-arm:  -> ResourceGroupName : 'rg-foundry-image-staging'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:06 ui: ==> azure-arm:  -> DeploymentName    : 'kvpkrdpae88ahyc10'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:06 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:06 [DEBUG] PUT https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/kvpkrdpae88ahyc10?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:17 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:17 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourcegroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/kvpkrdpae88ahyc10/operationStatuses/08584274223586572878?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:27 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:27 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourcegroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/kvpkrdpae88ahyc10/operationStatuses/08584274223586572878?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:27 ui: ==> azure-arm: Getting the certificate's URL ...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:27 ui: ==> azure-arm:  -> Key Vault Name        : 'pkrkvae88ahyc10'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:27 ui: ==> azure-arm:  -> Key Vault Secret Name : 'packerKeyVaultSecret'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:27 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:27 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging/providers/Microsoft.KeyVault/vaults/pkrkvae88ahyc10/secrets/packerKeyVaultSecret?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:30 ui: ==> azure-arm:  -> Certificate URL       : 'https://pkrkvae88ahyc10.vault.azure.net/secrets/packerKeyVaultSecret/012c98f7cfdd4350a85054c64ea3a056'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:30 ui: ==> azure-arm: Setting the certificate's URL ...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:30 ui: ==> azure-arm: Validating deployment template ...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:30 ui: ==> azure-arm:  -> ResourceGroupName : 'rg-foundry-image-staging'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:30 ui: ==> azure-arm:  -> DeploymentName    : 'pkrdpae88ahyc10'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:30 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:30 [DEBUG] POST https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/pkrdpae88ahyc10/validate?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:31 ui: ==> azure-arm: Deploying deployment template ...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:31 ui: ==> azure-arm:  -> ResourceGroupName : 'rg-foundry-image-staging'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:31 ui: ==> azure-arm:  -> DeploymentName    : 'pkrdpae88ahyc10'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:31 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:31 [DEBUG] PUT https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/pkrdpae88ahyc10?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:42 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:42 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourcegroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/pkrdpae88ahyc10/operationStatuses/08584274223338163824?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:02:52 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:02:52 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourcegroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/pkrdpae88ahyc10/operationStatuses/08584274223338163824?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:03:02 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:03:02 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourcegroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/pkrdpae88ahyc10/operationStatuses/08584274223338163824?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:03:12 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:03:12 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourcegroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/pkrdpae88ahyc10/operationStatuses/08584274223338163824?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:03:22 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:03:22 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourcegroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/pkrdpae88ahyc10/operationStatuses/08584274223338163824?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:03:32 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:03:32 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourcegroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/pkrdpae88ahyc10/operationStatuses/08584274223338163824?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:03:42 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:03:42 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourcegroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/pkrdpae88ahyc10/operationStatuses/08584274223338163824?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:03:53 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:03:53 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourcegroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/pkrdpae88ahyc10/operationStatuses/08584274223338163824?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:03 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:03 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourcegroups/rg-foundry-image-staging/providers/Microsoft.Resources/deployments/pkrdpae88ahyc10/operationStatuses/08584274223338163824?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:03 ui: ==> azure-arm: Getting the VM's IP address ...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:03 ui: ==> azure-arm:  -> ResourceGroupName   : 'rg-foundry-image-staging'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:03 ui: ==> azure-arm:  -> PublicIPAddressName : 'pkripae88ahyc10'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:03 ui: ==> azure-arm:  -> NicName             : 'pkrniae88ahyc10'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:03 ui: ==> azure-arm:  -> Network Connection  : 'PrivateEndpoint'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:03 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:03 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging/providers/Microsoft.Network/networkInterfaces/pkrniae88ahyc10?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:03 ui: ==> azure-arm:  -> IP Address          : '10.0.1.4'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:03 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:03 Waiting for WinRM, up to timeout: 30m0s
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:03 ui: ==> azure-arm: Waiting for WinRM to become available...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:03 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:03 [INFO] Attempting WinRM connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:03 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:03 [DEBUG] connecting to remote shell using WinRM
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:03 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:03 [ERROR] connection error: http response error: 401 - invalid content type
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:03 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:03 [ERROR] WinRM connection err: http response error: 401 - invalid content type
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:08 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:08 [INFO] Attempting WinRM connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:08 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:08 [DEBUG] connecting to remote shell using WinRM
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:08 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:08 [ERROR] connection error: http response error: 401 - invalid content type
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:08 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:08 [ERROR] WinRM connection err: http response error: 401 - invalid content type
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:13 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:13 [INFO] Attempting WinRM connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:13 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:13 [DEBUG] connecting to remote shell using WinRM
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:13 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:13 [ERROR] connection error: http response error: 401 - invalid content type
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:13 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:13 [ERROR] WinRM connection err: http response error: 401 - invalid content type
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:18 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:18 [INFO] Attempting WinRM connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:18 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:18 [DEBUG] connecting to remote shell using WinRM
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:18 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:18 [ERROR] connection error: http response error: 401 - invalid content type
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:18 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:18 [ERROR] WinRM connection err: http response error: 401 - invalid content type
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:23 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:23 [INFO] Attempting WinRM connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:23 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:23 [DEBUG] connecting to remote shell using WinRM
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:23 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:23 [ERROR] connection error: http response error: 401 - invalid content type
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:23 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:23 [ERROR] WinRM connection err: http response error: 401 - invalid content type
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:28 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:28 [INFO] Attempting WinRM connection...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:28 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:28 [DEBUG] connecting to remote shell using WinRM
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:35 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:35 Checking that WinRM is connected with: 'powershell.exe -EncodedCommand JABQAHIAbwBnAHIAZQBzAHMAUAByAGUAZgBlAHIAZQBuAGMAZQAgAD0AIAAnAFMAaQBsAGUAbgB0AGwAeQBDAG8AbgB0AGkAbgB1AGUAJwA7AGkAZgAgACgAVABlAHMAdAAtAFAAYQB0AGgAIAB2AGEAcgBpAGEAYgBsAGUAOgBnAGwAbwBiAGEAbAA6AFAAcgBvAGcAcgBlAHMAcwBQAHIAZQBmAGUAcgBlAG4AYwBlACkAewAkAFAAcgBvAGcAcgBlAHMAcwBQAHIAZQBmAGUAcgBlAG4AYwBlAD0AJwBTAGkAbABlAG4AdABsAHkAQwBvAG4AdABpAG4AdQBlACcAfQA7ACAAZQBjAGgAbwAgACIAVwBpAG4AUgBNACAAYwBvAG4AbgBlAGMAdABlAGQALgAiAA=='
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:35 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:35 [INFO] starting remote command: powershell.exe -EncodedCommand JABQAHIAbwBnAHIAZQBzAHMAUAByAGUAZgBlAHIAZQBuAGMAZQAgAD0AIAAnAFMAaQBsAGUAbgB0AGwAeQBDAG8AbgB0AGkAbgB1AGUAJwA7AGkAZgAgACgAVABlAHMAdAAtAFAAYQB0AGgAIAB2AGEAcgBpAGEAYgBsAGUAOgBnAGwAbwBiAGEAbAA6AFAAcgBvAGcAcgBlAHMAcwBQAHIAZQBmAGUAcgBlAG4AYwBlACkAewAkAFAAcgBvAGcAcgBlAHMAcwBQAHIAZQBmAGUAcgBlAG4AYwBlAD0AJwBTAGkAbABlAG4AdABsAHkAQwBvAG4AdABpAG4AdQBlACcAfQA7ACAAZQBjAGgAbwAgACIAVwBpAG4AUgBNACAAYwBvAG4AbgBlAGMAdABlAGQALgAiAA==
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:37 ui: ==> azure-arm: WinRM connected.
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:37 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:37 [INFO] command 'powershell.exe -EncodedCommand JABQAHIAbwBnAHIAZQBzAHMAUAByAGUAZgBlAHIAZQBuAGMAZQAgAD0AIAAnAFMAaQBsAGUAbgB0AGwAeQBDAG8AbgB0AGkAbgB1AGUAJwA7AGkAZgAgACgAVABlAHMAdAAtAFAAYQB0AGgAIAB2AGEAcgBpAGEAYgBsAGUAOgBnAGwAbwBiAGEAbAA6AFAAcgBvAGcAcgBlAHMAcwBQAHIAZQBmAGUAcgBlAG4AYwBlACkAewAkAFAAcgBvAGcAcgBlAHMAcwBQAHIAZQBmAGUAcgBlAG4AYwBlAD0AJwBTAGkAbABlAG4AdABsAHkAQwBvAG4AdABpAG4AdQBlACcAfQA7ACAAZQBjAGgAbwAgACIAVwBpAG4AUgBNACAAYwBvAG4AbgBlAGMAdABlAGQALgAiAA==' exited with code: 0
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:37 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:37 Connected to machine
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:37 ui: ==> azure-arm: Connected to WinRM!
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:37 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:37 Running the provision hook
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:37 ui: ==> azure-arm: Uploading /aib/packerInput/DeprovisioningScript.txt => c:\DeprovisioningScript.ps1
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:37 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:37 Uploading file to 'c:\DeprovisioningScript.ps1'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:37 packer-provisioner-file plugin: [INFO] 1288 bytes written for 'uploadData'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:37 [INFO] 1288 bytes written for 'uploadData'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-provisioner-file plugin: closing
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 closing
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:38 closing
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 ui: ==> azure-arm: Provisioning with Powershell...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-provisioner-powershell plugin: Found command: [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-provisioner-powershell plugin: Found command: $ErrorActionPreference = "Stop"
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-provisioner-powershell plugin: Found command: Write-Host "Refreshing winget sources..."
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-provisioner-powershell plugin: Found command: winget source update --disable-interactivity
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-provisioner-powershell plugin: Found command: Write-Host "Installing Azure Foundry Local..."
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-provisioner-powershell plugin: Found command: winget install Microsoft.FoundryLocal --accept-package-agreements --accept-source-agreements --silent --disable-interactivity
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-provisioner-powershell plugin: Found command: if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -ne -1978335189) { throw "Foundry Local install failed – winget exit code: $LASTEXITCODE" }
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-provisioner-powershell plugin: Found command: Write-Host "Azure Foundry Local installation complete."
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-provisioner-powershell plugin: Writing PowerShell script to file: /tmp/powershell-provisioner844564579
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 ui: ==> azure-arm: Provisioning with powershell script: /tmp/powershell-provisioner844564579
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-provisioner-powershell plugin: Opening /tmp/powershell-provisioner844564579 for reading
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-provisioner-powershell plugin: Uploading env vars to c:/Windows/Temp/packer-ps-env-vars-69bfe84c-5f9c-e33d-d513-ed28c2a63685.ps1
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-provisioner-powershell plugin: [INFO] 74 bytes written for 'uploadData'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 [INFO] 74 bytes written for 'uploadData'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:38 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:38 Uploading file to 'c:/Windows/Temp/packer-ps-env-vars-69bfe84c-5f9c-e33d-d513-ed28c2a63685.ps1'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:39 packer-provisioner-powershell plugin: Building elevated command wrapper for: powershell -executionpolicy bypass -file c:/Windows/Temp/script-69bfe84c-8aab-2921-e22d-97da45ce3251.ps1
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:39 packer-provisioner-powershell plugin: Command [powershell -executionpolicy bypass -file c:/Windows/Temp/script-69bfe84c-8aab-2921-e22d-97da45ce3251.ps1 > %SYSTEMROOT%/Temp/packer-69bfe8e7-f1af-4187-7e34-2add0f154394.out 2>&1] converted to [powershell -executionpolicy bypass -file c:/Windows/Temp/script-69bfe84c-8aab-2921-e22d-97da45ce3251.ps1 &gt; %SYSTEMROOT%/Temp/packer-69bfe8e7-f1af-4187-7e34-2add0f154394.out 2&gt;&amp;1] for use in XML string
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:39 packer-provisioner-powershell plugin: Uploading elevated shell wrapper for command [powershell -executionpolicy bypass -file c:/Windows/Temp/script-69bfe84c-8aab-2921-e22d-97da45ce3251.ps1 > %SYSTEMROOT%/Temp/packer-69bfe8e7-f1af-4187-7e34-2add0f154394.out 2>&1] to [C:/Windows/Temp/packer-elevated-shell-69bfe8e7-2115-684f-3604-bee548396e07.ps1]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:39 packer-provisioner-powershell plugin: [INFO] 3255 bytes written for 'uploadData'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:39 [INFO] 3255 bytes written for 'uploadData'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:39 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:39 Uploading file to 'C:/Windows/Temp/packer-elevated-shell-69bfe8e7-2115-684f-3604-bee548396e07.ps1'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:50 packer-provisioner-powershell plugin: [INFO] 1049 bytes written for 'uploadData'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:50 [INFO] 1049 bytes written for 'uploadData'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:50 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:50 Uploading file to 'c:/Windows/Temp/script-69bfe84c-8aab-2921-e22d-97da45ce3251.ps1'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 13:04:51 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 13:04:51 [INFO] starting remote command: powershell -executionpolicy bypass -file "C:/Windows/Temp/packer-elevated-shell-69bfe8e7-2115-684f-3604-bee548396e07.ps1"
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 ui error: Cancelling build after receiving terminated
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 Cancelling builder after context cancellation context canceled
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 packer-provisioner-powershell plugin: Received interrupt signal (count: 1). Ignoring.
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 packer-provisioner-powershell plugin: Received interrupt signal (count: 1). Ignoring.
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 packer-provisioner-powershell plugin: Received interrupt signal (count: 1). Ignoring.
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 14:59:47 Received interrupt signal (count: 1). Ignoring.
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 14:59:47 Cancelling provisioning due to context cancellation: context canceled
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 14:59:47 Cancelling hook after context cancellation context canceled
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 packer-provisioner-windows-restart plugin: Received interrupt signal (count: 1). Ignoring.
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 packer-provisioner-file plugin: Received interrupt signal (count: 1). Ignoring.
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 ui: ==> azure-arm: 
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER ==> azure-arm: Deleting Virtual Machine deployment and its attached resources...
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 Cancelling provisioner after context cancellation context canceled
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 14:59:47 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging/providers/Microsoft.Compute/virtualMachines/pkrvmae88ahyc10?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 14:59:47 [DEBUG] GET https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging/deployments/pkrdpae88ahyc10/operations?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 14:59:47 [INFO] Attempting deletion -> Microsoft.Compute/virtualMachines : pkrvmae88ahyc10
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:47 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 14:59:47 [DEBUG] DELETE https://management.azure.com/subscriptions/72b2c395-4f94-4e3f-997b-43b4871afee0/resourceGroups/rg-foundry-image-staging/providers/Microsoft.Compute/virtualMachines/pkrvmae88ahyc10?[REDACTED]
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:49 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 14:59:49 [INFO] command 'powershell -executionpolicy bypass -file "C:/Windows/Temp/packer-elevated-shell-69bfe8e7-2115-684f-3604-bee548396e07.ps1"' exited with code: 0
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:49 packer-plugin-azure_v2.5.2_x5.0_linux_amd64 plugin: 2026/03/22 14:59:49 [INFO] RPC endpoint: Communicator ended with: 0
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:49 [INFO] 0 bytes written for 'stdout'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:49 [INFO] 0 bytes written for 'stderr'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:49 [INFO] RPC client: Communicator ended with: 0
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:49 [INFO] RPC endpoint: Communicator ended with: 0
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:49 packer-provisioner-powershell plugin: Retryable error: context canceled
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:49 packer-provisioner-powershell plugin: [INFO] 0 bytes written for 'stdout'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:49 packer-provisioner-powershell plugin: [INFO] 0 bytes written for 'stderr'
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER 2026/03/22 14:59:49 packer-provisioner-powershell plugin: [INFO] RPC client: Communicator ended with: 0
+[b77c2e66-e3b8-461d-8f0a-38adf930a855] PACKER Done exporting Packer logs to Azure Storage.
