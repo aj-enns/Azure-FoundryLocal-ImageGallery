@@ -65,7 +65,7 @@ var foundryInstallSteps = [
       'Write-Host "Waiting 60s for background tasks (Windows Update, Defender) to settle..."'
       'Start-Sleep -Seconds 60'
       'Write-Host "OS: $((Get-CimInstance Win32_OperatingSystem).Caption)"'
-      'Write-Host "Free disk: $([math]::Round((Get-CimInstance Win32_LogicalDisk -Filter \"DeviceID=\'C:\'\").FreeSpace/1GB,1)) GB"'
+      'Write-Host "Free disk: $([math]::Round((Get-PSDrive C).Free/1GB,1)) GB"'
       'Write-Host "[$(Get-Date -f o)] === STEP: VM Ready Check — COMPLETE ==="'
     ]
   }
