@@ -263,7 +263,7 @@ param additionalReplicationRegions = ['westus2', 'westeurope']
 4. Optionally override the resource group name and Azure region.
 5. Click the green **Run workflow** button.
 
-The build takes approximately **2–3 hours** (mostly due to Windows Update applying patches).
+The build takes approximately **2–4 hours** (mostly due to Windows Update applying security and critical patches).
 
 ---
 
@@ -280,7 +280,7 @@ The workflow executes these steps automatically:
 | **5. Deploy Bicep** | Deploys the infrastructure: User-Assigned Managed Identity, Azure Compute Gallery (with community sharing), image definition, and Image Builder template. |
 | **6. RBAC Propagation** | Waits 90 seconds for role assignments to propagate. |
 | **7. Trigger Build** | Starts the Azure Image Builder build. |
-| **8. Poll for Completion** | Checks build status every 5 minutes (up to 3 hours). |
+| **8. Poll for Completion** | Checks build status every 5 minutes (up to ~5 hours). |
 | **9. Summary** | Prints the published image version details to the GitHub Actions summary. |
 
 ### Resources Created
@@ -374,7 +374,7 @@ To change gallery metadata, region, or replication settings, update `infra/main.
 | **"Authorization failed" during Bicep deployment** | App Registration lacks permissions | Ensure the App Registration has **Contributor** on the subscription. If the Bicep deployment creates role assignments, **Owner** may be needed. |
 | **"Federated credential not found"** | Branch name mismatch | Ensure the federated credential in Azure AD matches the branch name the workflow runs from (e.g. `main`). |
 | **Provider registration fails** | Subscription doesn't support the provider | Some providers require specific subscription types. Check `az provider show --namespace Microsoft.VirtualMachineImages` for registration state. |
-| **Image build times out (>3 hours)** | Windows Update or network issues in the build VM | Check the Image Builder run status with `az image builder show --resource-group <rg> --name <template> --query lastRunStatus`. Retry the workflow. |
+| **Image build times out (>5 hours)** | Large batch of Windows Updates (e.g. right after Patch Tuesday) or network bottleneck in the build VM | Check the Image Builder run status with `az image builder show --resource-group <rg> --name <template> --query lastRunStatus`. Retry the workflow — the next run may coincide with a fresher marketplace image with fewer pending patches. |
 | **"galleryPublicNamePrefix already in use"** | Prefix must be globally unique | Choose a different, unique prefix in `infra/main.bicepparam`. Must be 5–16 chars, alphanumeric only. |
 | **Image Builder fails with Contributor error** | RBAC hasn't propagated yet | The workflow includes a 90-second wait. If issues persist, manually re-run the failed workflow — RBAC should have propagated by then. |
 | **"Key based authentication is not permitted"** | Azure Policy blocks shared key access on storage accounts | Create a staging resource group with a policy exemption, then set the `AZURE_STAGING_RG_ID` GitHub Variable. See the [staging resource group](#5-configure-github-variables-optional) section. |
