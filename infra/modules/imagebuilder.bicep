@@ -58,37 +58,34 @@ param applyWindowsUpdate bool = true
 var foundryInstallSteps = [
   {
     type: 'PowerShell'
+    name: 'WaitForVMReady'
+    runElevated: true
+    inline: [
+      'Write-Host "[$(Get-Date -f o)] === STEP: VM Ready Check — START ==="'
+      'Write-Host "Waiting 60s for background tasks (Windows Update, Defender) to settle..."'
+      'Start-Sleep -Seconds 60'
+      'Write-Host "OS: $((Get-CimInstance Win32_OperatingSystem).Caption)"'
+      'Write-Host "Free disk: $([math]::Round((Get-CimInstance Win32_LogicalDisk -Filter \"DeviceID=\'C:\'\").FreeSpace/1GB,1)) GB"'
+      'Write-Host "[$(Get-Date -f o)] === STEP: VM Ready Check — COMPLETE ==="'
+    ]
+  }
+  {
+    type: 'PowerShell'
     name: 'InstallFoundryLocal'
     runElevated: true
     inline: [
       '$ErrorActionPreference = "Stop"'
       '[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12'
       'Write-Host "[$(Get-Date -f o)] === STEP: Install Foundry Local — START ==="'
-      ''
-      '# Download the MSIX directly from GitHub releases (avoids winget SYSTEM-account issues)'
       '$uri = "https://github.com/microsoft/Foundry-Local/releases/latest/download/FoundryLocal.msix"'
       '$dest = "C:\\Temp\\FoundryLocal.msix"'
-      'Write-Host "Downloading Foundry Local MSIX from $uri ..."'
+      'Write-Host "Downloading from $uri"'
       'New-Item -ItemType Directory -Path C:\\Temp -Force | Out-Null'
       'Invoke-WebRequest -Uri $uri -OutFile $dest -UseBasicParsing'
-      'Write-Host "Download complete — file size: $((Get-Item $dest).Length / 1MB) MB"'
-      ''
-      '# Install the MSIX package'
-      'Write-Host "Installing MSIX package..."'
+      'Write-Host "Downloaded: $((Get-Item $dest).Length / 1MB) MB"'
+      'Write-Host "Installing MSIX..."'
       'Add-AppxPackage -Path $dest -ErrorAction Stop'
-      'Write-Host "MSIX package installed."'
-      ''
-      '# Clean up the installer'
       'Remove-Item -Path $dest -Force -ErrorAction SilentlyContinue'
-      ''
-      '# Refresh PATH so the current session can find foundry'
-      '$machinePath = [System.Environment]::GetEnvironmentVariable("Path", "Machine")'
-      '$userPath = [System.Environment]::GetEnvironmentVariable("Path", "User")'
-      '$env:Path = "$machinePath;$userPath"'
-      ''
-      '# Verify'
-      '$foundry = Get-Command foundry -ErrorAction SilentlyContinue'
-      'if ($foundry) { Write-Host "foundry CLI found at: $($foundry.Source)" } else { Write-Host "WARNING: foundry not in PATH yet — may require a reboot" }'
       'Write-Host "[$(Get-Date -f o)] === STEP: Install Foundry Local — COMPLETE ==="'
     ]
   }
@@ -173,11 +170,9 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01
   }
 
   properties: {
-    // Allow up to 5 hours for the build.  A fresh Windows 11 24H2 marketplace
-    // image can have 100+ security and important patches pending (especially
-    // in the week after Patch Tuesday).  Add time for Foundry Local install,
-    // two reboots, cleanup, and gallery distribution.
-    buildTimeoutInMinutes: 120
+    // Temporarily set low for debugging. Increase to 300+ once the install
+    // step is confirmed working.
+    buildTimeoutInMinutes: 15
 
     // Use a dedicated staging resource group so it can be exempted from
     // Azure Policies that block storage-account shared key access.
