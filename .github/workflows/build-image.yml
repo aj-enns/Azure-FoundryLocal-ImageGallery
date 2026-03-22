@@ -117,6 +117,10 @@ jobs:
           TEMPLATE_NAME="flocal-win11-foundry-template"
           RG="${{ env.RESOURCE_GROUP }}"
           if az image builder show --name "$TEMPLATE_NAME" --resource-group "$RG" &>/dev/null; then
+            # Cancel any in-progress build before deleting
+            echo "Cancelling any running build..."
+            az image builder cancel --name "$TEMPLATE_NAME" --resource-group "$RG" 2>/dev/null || true
+            sleep 10
             echo "Deleting existing image template '$TEMPLATE_NAME'..."
             az image builder delete --name "$TEMPLATE_NAME" --resource-group "$RG"
             echo "Template deleted."
