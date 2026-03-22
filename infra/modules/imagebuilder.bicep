@@ -32,6 +32,21 @@ param stagingResourceGroupId string = ''
 // Image Builder template
 // API 2024-02-01 supports Trusted Launch VMs as the build VM which is required
 // for Windows 11.
+//
+// Windows Update strategy
+// ───────────────────────
+// • Two passes of WindowsUpdate are run with a restart between each.
+//   Two passes are enough: the first installs all currently-available patches;
+//   the second catches any updates that only become visible after the first
+//   batch is rebooted into.
+// • The filter uses AutoSelectOnWebSites (= true for security, critical, and
+//   important updates) rather than include:$true.  Omitting this filter
+//   caused large optional driver/feature packages (often 1–3 GB each) to be
+//   queued, dramatically inflating build time and causing timeouts.
+// • updateLimit is intentionally omitted so the default (1,000) applies.
+//   Setting it to a small value (e.g. 40) means only 40 updates are attempted
+//   per pass; on a fresh image after Patch Tuesday there can be 100+ pending
+//   updates, so a low cap leaves the image partially patched.
 // ─────────────────────────────────────────────────────────────────────────────
 
 resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01' = {
@@ -47,10 +62,11 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01
   }
 
   properties: {
-    // Allow up to 4.5 hours for the build. Windows Update on a fresh
-    // Windows 11 image can easily take 2+ hours on its own, plus time for
-    // Foundry Local install, restarts, cleanup, and VHD distribution.
-    buildTimeoutInMinutes: 270
+    // Allow up to 5 hours for the build.  A fresh Windows 11 24H2 marketplace
+    // image can have 100+ security and important patches pending (especially
+    // in the week after Patch Tuesday).  Add time for Foundry Local install,
+    // two reboots, cleanup, and gallery distribution.
+    buildTimeoutInMinutes: 300
 
     // Use a dedicated staging resource group so it can be exempted from
     // Azure Policies that block storage-account shared key access.
@@ -100,15 +116,19 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01
         restartTimeout: '10m'
       }
 
-      // 3. Apply all available non-preview Windows Updates.
+      // 3. Apply all available security / critical / important Windows Updates.
+      //    AutoSelectOnWebSites = true means "recommended for automatic install",
+      //    which covers security, critical, and important updates but skips large
+      //    optional driver and feature packages that inflate build time.
+      //    updateLimit is omitted to use the default (1,000) — a low cap causes
+      //    the image to be left partially patched when there are many updates.
       {
         type: 'WindowsUpdate'
         searchCriteria: 'IsInstalled=0'
         filters: [
           'exclude:$_.Title -like \'\'*Preview*\'\''
-          'include:$true'
+          'include:$_.AutoSelectOnWebSites -eq $true'
         ]
-        updateLimit: 40
       }
 
       // 4. Restart after Windows Update (first pass).
@@ -118,16 +138,15 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2024-02-01
         restartTimeout: '15m'
       }
 
-      // 5. Apply a second round of Windows Updates.
-      //    Some updates only appear after a reboot installs earlier ones.
+      // 5. Apply a second round of Windows Updates (same recommended-only filter).
+      //    Some updates only become available after a reboot installs earlier ones.
       {
         type: 'WindowsUpdate'
         searchCriteria: 'IsInstalled=0'
         filters: [
           'exclude:$_.Title -like \'\'*Preview*\'\''
-          'include:$true'
+          'include:$_.AutoSelectOnWebSites -eq $true'
         ]
-        updateLimit: 40
       }
 
       // 6. Restart after Windows Update (second pass).
